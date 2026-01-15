@@ -1,16 +1,128 @@
-@import "tailwindcss";
-
-:root {
-  --background: #07070a;
-  --foreground: #ffffff;
-
-  /* font variables already provided by Next/font */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Box sizing + remove default spacing */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+/* Root variables */
+:root {
+  --background: #07070a;
+  --foreground: #ffffff;
+
+  /* Font vars from next/font in layout.tsx */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --font-main: "MainText", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Handy layout constants */
+  --container-max: 1200px;
+}
+
+/* Document base */
+html, body {
+  height: 100%;
+}
+
+html {
+  /* IMPORTANT: don't set smooth scroll globally (bad for ScrollTrigger) */
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  font-family: var(--font-sans), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.5;
+
+  background: var(--background);
+  color: var(--foreground);
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Media elements behave consistently */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+canvas {
+  /* Helps when we later add pointer interactions to WebGL */
+  touch-action: none;
+}
+
+/* Typography defaults */
+h1, h2, h3, h4, h5, h6 {
+  font: inherit;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+/* Links & buttons are neutral */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Lists reset */
+ul, ol {
+  list-style: none;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Accessible focus */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@font-face {
+  font-family: "MainText";
+  src: url("/fonts/MainText.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Reduced motion (important for GSAP/WebGL sites) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
