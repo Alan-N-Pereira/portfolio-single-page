@@ -1,5 +1,27 @@
 .root {
   width: 100%;
+  font-family: var(--font-main);
+
+  /* DESKTOP BASELINE (your original look) */
+  --mainStartScale: 1.7;
+  --mainStartRot: -10;
+
+  --skyStartScale: 1.7;
+  --skyStartRot: -20;
+
+  --bgStartScale: 1.8;
+  --bgStartRot: -5;
+
+  --skyEndScale: 1.2;
+  --bgEndScale: 1.1;
+
+  --alanStartScale: 2;
+  --alanEndScale: 2.4;
+  --alanStartBottom: -150%;
+  --alanEndBottom: -25%;
+
+  --textStartY: 250;
+  --parallaxMax: 40;
 }
 
 /* Overlay SVG intro */
@@ -25,7 +47,7 @@
 /* Main hero */
 .main {
   width: 100%;
-  font-family: var(--font-main);
+  will-change: transform;
 }
 
 .landing {
@@ -82,7 +104,7 @@
   font-size: 40px;
   color: #fff;
   font-weight: 400;
-  text-shadow: -2px 2px 4px rgba(0,0,0,0.51);
+  text-shadow: -2px 2px 4px rgba(0, 0, 0, 0.51);
 }
 
 /* Images */
@@ -101,13 +123,7 @@
   height: 100%;
   object-fit: cover;
   will-change: transform;
-}
-.skyScale {
-  transform: scale(1.2);
-}
-
-.bgScale {
-  transform: scale(1.1);
+  transform-origin: 50% 50%;
 }
 
 /* Center Text */
@@ -116,15 +132,14 @@
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
-
   display: flex;
   flex-direction: column;
   gap: 5px;
-
   color: #fff;
   text-align: center;
   pointer-events: none;
   user-select: none;
+  will-change: transform;
 }
 
 .text h1 {
@@ -133,25 +148,26 @@
   font-weight: 700;
   letter-spacing: -0.005em;
   white-space: nowrap;
-  text-shadow: -2px 2px 4px rgba(0,0,0,0.51);
+  text-shadow: -2px 2px 4px rgba(0, 0, 0, 0.51);
 }
 
 .text h1:first-child {
-  margin-left: -500px; /* -ml-40 */
+  margin-left: -500px;
 }
-
 .text h1:last-child {
-  margin-left: 200px; /* ml-20 */
+  margin-left: 200px;
 }
 
+/* Alan */
 .alan {
   position: absolute;
   left: 50%;
-  bottom: -20%;
-  transform: translateX(-50%) scale(2.3);
+  bottom: -150%;
+  transform: translateX(-50%) scale(2) rotate(-20deg);
   transform-origin: 50% 100%;
   height: 50%;
   max-width: none;
+  will-change: transform, bottom;
 }
 
 /* Bottom bar */
@@ -166,13 +182,189 @@
 }
 
 .btmbarInner {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  font-family: "Helvetica Now Display", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.footerRight {
+  text-align: right;
+}
+
+.footerTitle {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.footerSub {
+  font-style: italic;
+  font-weight: 600;
+  font-size: 14px;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.btmbarScroll {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: scrollBounce 1.2s ease-in-out infinite;
 }
 
 .scrollText {
   font-size: 20px;
-  font-family: "Helvetica Now Display", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   font-weight: 400;
+}
+
+.scrollArrow {
+  width: 20px;
+  height: auto;
+  opacity: 0.9;
+}
+
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+/* =========================
+   RESPONSIVE: EVERYTHING SHRINKS
+   ========================= */
+
+/* Large tablets / small laptops */
+@media (max-width: 1024px) {
+  .root {
+    --mainStartScale: 1.35;
+    --skyStartScale: 1.35;
+    --bgStartScale: 1.45;
+
+    --skyEndScale: 1.12;
+    --bgEndScale: 1.05;
+
+    --alanEndScale: 2.1;
+    --parallaxMax: 26;
+    --textStartY: 210;
+  }
+
+  .navbar {
+    padding: 28px 24px;
+  }
+
+  .text h1 {
+    font-size: 9rem;
+  }
+  .text h1:first-child {
+    margin-left: -320px;
+  }
+  .text h1:last-child {
+    margin-left: 140px;
+  }
+
+  .btmbar {
+    padding: 36px 24px;
+  }
+}
+
+/* Phones */
+@media (max-width: 768px) {
+  .root {
+    --mainStartScale: 1.15;
+    --skyStartScale: 1.15;
+    --bgStartScale: 1.22;
+
+    --skyEndScale: 1.06;
+    --bgEndScale: 1.02;
+
+    --alanStartScale: 1.7;
+    --alanEndScale: 1.85;
+    --alanEndBottom: -18%;
+
+    --textStartY: 160;
+    --parallaxMax: 14;
+  }
+
+  .navbar {
+    padding: 22px 18px;
+  }
+
+  .logoText {
+    font-size: 30px;
+  }
+
+  .text {
+    top: 12%;
+  }
+
+  .text h1 {
+    font-size: 6.2rem;
+  }
+  .text h1:first-child {
+    margin-left: -180px;
+  }
+  .text h1:last-child {
+    margin-left: 80px;
+  }
+
+  .alan {
+    height: 58%;
+  }
+
+  .btmbarInner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .footerRight {
+    text-align: center;
+  }
+
+  .btmbarScroll {
+    position: static;
+    transform: none;
+  }
+
+  .btmbar {
+    padding: 26px 18px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 420px) {
+  .root {
+    --mainStartScale: 1.08;
+    --skyStartScale: 1.08;
+    --bgStartScale: 1.12;
+
+    --alanEndScale: 1.75;
+    --alanEndBottom: -15%;
+
+    --textStartY: 140;
+    --parallaxMax: 10;
+  }
+
+  .text h1 {
+    font-size: 5.3rem;
+  }
+  .text h1:first-child {
+    margin-left: -150px;
+  }
+  .text h1:last-child {
+    margin-left: 60px;
+  }
 }

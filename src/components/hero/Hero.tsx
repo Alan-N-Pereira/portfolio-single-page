@@ -4,6 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import styles from "./Hero.module.css";
 
+function cssVarNumber(el: HTMLElement, name: string, fallback: number) {
+  const v = getComputedStyle(el).getPropertyValue(name).trim();
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function cssVarString(el: HTMLElement, name: string, fallback: string) {
+  const v = getComputedStyle(el).getPropertyValue(name).trim();
+  return v || fallback;
+}
+
 export default function Hero() {
   const [showContent, setShowContent] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -14,9 +25,19 @@ export default function Hero() {
     if (!root) return;
 
     const maskGroup = root.querySelector<SVGGElement>(".vi-mask-group");
-    if (!maskGroup) return;
+    const solidHi = root.querySelector<SVGGElement>(".hi-solid");
+    if (!maskGroup || !solidHi) return;
 
     const tl = gsap.timeline({ defaults: { transformOrigin: "50% 50%" } });
+
+    tl.set(solidHi, { opacity: 1 });
+    tl.to({}, { duration: 0.35 });
+
+    tl.to(solidHi, {
+      opacity: 0,
+      duration: 1.8,
+      ease: "power2.inOut",
+    });
 
     tl.to(maskGroup, {
       rotate: 10,
@@ -35,11 +56,11 @@ export default function Hero() {
     );
 
     return () => {
-      tl.kill();
+      tl.kill()
     };
   }, []);
 
-  // Mouse parallax on hero content
+  // Reveal + Parallax
   useEffect(() => {
     if (!showContent) return;
 
@@ -47,32 +68,127 @@ export default function Hero() {
     if (!root) return;
 
     const main = root.querySelector<HTMLElement>("[data-main='true']");
-    if (!main) return;
+    const skyEl = root.querySelector<HTMLElement>("[data-sky='true']");
+    const bgEl = root.querySelector<HTMLElement>("[data-bg='true']");
+    const alanEl = root.querySelector<HTMLElement>("[data-alan='true']");
+    const textEl = root.querySelector<HTMLElement>("[data-text='true']");
 
-    const textEl = main.querySelector<HTMLElement>("[data-text='true']");
-    const skyEl = main.querySelector<HTMLElement>("[data-sky='true']");
-    const bgEl = main.querySelector<HTMLElement>("[data-bg='true']");
+    if (!main || !skyEl || !bgEl || !alanEl || !textEl) return;
 
-    if (!textEl || !skyEl || !bgEl) return;
+    // Read responsive values from CSS
+    const mainStartScale = cssVarNumber(root, "--mainStartScale", 1.7);
+    const mainStartRot = cssVarNumber(root, "--mainStartRot", -10);
 
-    // smoother + prevents creating a new tween every mousemove
+    const skyStartScale = cssVarNumber(root, "--skyStartScale", 1.7);
+    const skyStartRot = cssVarNumber(root, "--skyStartRot", -20);
+
+    const bgStartScale = cssVarNumber(root, "--bgStartScale", 1.8);
+    const bgStartRot = cssVarNumber(root, "--bgStartRot", -5);
+
+    const skyEndScale = cssVarNumber(root, "--skyEndScale", 1.2);
+    const bgEndScale = cssVarNumber(root, "--bgEndScale", 1.1);
+
+    const alanStartScale = cssVarNumber(root, "--alanStartScale", 2);
+    const alanEndScale = cssVarNumber(root, "--alanEndScale", 2.4);
+    const alanStartBottom = cssVarString(root, "--alanStartBottom", "-150%");
+    const alanEndBottom = cssVarString(root, "--alanEndBottom", "-25%");
+
+    const textStartY = cssVarNumber(root, "--textStartY", 250);
+
+    // Start states
+    gsap.set(main, { scale: mainStartScale, rotate: mainStartRot, transformOrigin: "50% 50%" });
+    gsap.set(skyEl, { scale: skyStartScale, rotate: skyStartRot, transformOrigin: "50% 50%" });
+    gsap.set(bgEl, { scale: bgStartScale, rotate: bgStartRot, transformOrigin: "50% 50%" });
+
+    gsap.set(alanEl, {
+      xPercent: -50,
+      left: "50%",
+      bottom: alanStartBottom,
+      rotate: -20,
+      scale: alanStartScale,
+      transformOrigin: "50% 100%",
+    });
+
+    gsap.set(textEl, { y: textStartY, opacity: 0 });
+
+    // Reveal timeline
+    const tl = gsap.timeline();
+
+    tl.to(main, {
+      scale: 1,
+      rotate: 0,
+      duration: 1,
+      ease: "expo.inOut",
+    })
+      .to(
+        skyEl,
+        {
+          scale: skyEndScale,
+          rotate: 0,
+          duration: 1,
+          ease: "expo.inOut",
+        },
+        "-=1.0"
+      )
+      .to(
+        bgEl,
+        {
+          scale: bgEndScale,
+          rotate: 0,
+          duration: 1,
+          ease: "expo.inOut",
+        },
+        "-=0.8"
+      )
+      .to(
+        alanEl,
+        {
+          scale: alanEndScale,
+          rotate: 0,
+          bottom: alanEndBottom,
+          duration: 2,
+          ease: "expo.inOut",
+        },
+        "-=0.8"
+      )
+      .to(
+        textEl,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: "expo.out",
+        },
+        "-=0.2"
+      );
+
+    // Parallax (desktop + mobile touch)
+    const parallaxMax = cssVarNumber(root, "--parallaxMax", 40);
     const quickSky = gsap.quickTo(skyEl, "x", { duration: 0.6, ease: "power3.out" });
     const quickBg = gsap.quickTo(bgEl, "x", { duration: 0.6, ease: "power3.out" });
     const quickText = gsap.quickTo(textEl, "x", { duration: 0.6, ease: "power3.out" });
 
-    const onMove = (e: MouseEvent) => {
-      const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
-
-      // matches your original intent
-      quickText(xMove * -2);
+    const applyMove = (clientX: number) => {
+      const xMove = (clientX / window.innerWidth - 0.5) * parallaxMax;
+      quickText(xMove * 3);
       quickSky(xMove);
       quickBg(xMove * 1.7);
     };
 
-    main.addEventListener("mousemove", onMove);
+    const onPointerMove = (e: PointerEvent) => applyMove(e.clientX);
+    const onTouchMove = (e: TouchEvent) => {
+      if (!e.touches.length) return;
+      applyMove(e.touches[0].clientX);
+    };
+
+    main.addEventListener("pointermove", onPointerMove, { passive: true });
+    main.addEventListener("touchmove", onTouchMove, { passive: true });
 
     return () => {
-      main.removeEventListener("mousemove", onMove);
+      main.removeEventListener("pointermove", onPointerMove);
+      main.removeEventListener("touchmove", onTouchMove);
+      tl.kill();
+      gsap.killTweensOf([main, skyEl, bgEl, alanEl, textEl]);
     };
   }, [showContent]);
 
@@ -92,7 +208,7 @@ export default function Hero() {
                     textAnchor="middle"
                     fill="white"
                     dominantBaseline="middle"
-                    fontFamily="Arial Black"
+                    fontFamily="MainText"
                   >
                     HI
                   </text>
@@ -100,7 +216,6 @@ export default function Hero() {
               </mask>
             </defs>
 
-            {/* SVG uses <image>, not <Image> */}
             <image
               href="/hero/bg.png"
               width="100%"
@@ -108,6 +223,20 @@ export default function Hero() {
               preserveAspectRatio="xMidYMid slice"
               mask="url(#hiMask)"
             />
+
+            <g className="hi-solid">
+              <text
+                x="50%"
+                y="50%"
+                fontSize="250"
+                textAnchor="middle"
+                fill="white"
+                dominantBaseline="middle"
+                fontFamily="MainText"
+              >
+                HI
+              </text>
+            </g>
           </svg>
         </div>
       )}
@@ -127,30 +256,33 @@ export default function Hero() {
             </div>
 
             <div className={styles.imagesDiv}>
-              <img
-                className={`${styles.sky} ${styles.skyScale}`}
-                data-sky="true"
-                src="/hero/sky.png"
-                alt=""
-              />
-              <img
-                className={`${styles.bg} ${styles.bgScale}`}
-                data-bg="true"
-                src="/hero/bg.png"
-                alt=""
-              />
+              <img className={styles.sky} data-sky="true" src="/hero/sky.png" alt="" />
+              <img className={styles.bg} data-bg="true" src="/hero/bg.png" alt="" />
 
               <div className={styles.text} data-text="true">
-                <h1 className={styles.textWeb}>Web</h1>
-                <h1 className={styles.textDev}>Devloper</h1>
+                <h1>Web</h1>
+                <h1>Developer</h1>
               </div>
 
-              <img className={styles.alan} src="/hero/alan1.png" alt="" />
+              <img className={styles.alan} data-alan="true" src="/hero/alan1.png" alt="" />
             </div>
 
             <div className={styles.btmbar}>
               <div className={styles.btmbarInner}>
-                <h3 className={styles.scrollText}>Scroll Down</h3>
+                <div className={styles.footerLeft}>
+                  <p className={styles.footerTitle}>Mumbai, India</p>
+                  <p className={styles.footerSub}>Where it all began</p>
+                </div>
+
+                <div className={styles.btmbarScroll}>
+                  <h3 className={styles.scrollText}>Scroll Down</h3>
+                  <img className={styles.scrollArrow} src="/hero/downSymbol.png" alt="" aria-hidden="true" />
+                </div>
+
+                <div className={styles.footerRight}>
+                  <p className={styles.footerTitle}>Web Developer / Frontend Engineer</p>
+                  <p className={styles.footerSub}>Based in London</p>
+                </div>
               </div>
             </div>
           </div>
