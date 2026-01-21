@@ -1,30 +1,8 @@
 .root {
   width: 100%;
-  font-family: var(--font-main);
-
-  /* DESKTOP BASELINE (your original look) */
-  --mainStartScale: 1.7;
-  --mainStartRot: -10;
-
-  --skyStartScale: 1.7;
-  --skyStartRot: -20;
-
-  --bgStartScale: 1.8;
-  --bgStartRot: -5;
-
-  --skyEndScale: 1.2;
-  --bgEndScale: 1.1;
-
-  --alanStartScale: 2;
-  --alanEndScale: 2.4;
-  --alanStartBottom: -150%;
-  --alanEndBottom: -25%;
-
-  --textStartY: 250;
-  --parallaxMax: 40;
 }
 
-/* Overlay SVG intro */
+/* ------------------ INTRO SVG OVERLAY ------------------ */
 .svgOverlay {
   position: fixed;
   inset: 0;
@@ -44,9 +22,19 @@
   display: block;
 }
 
-/* Main hero */
+/* ------------------ PINNED WRAP ------------------ */
+.pinWrap {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* pinned by ScrollTrigger */
+  overflow: hidden;
+  background: #000;
+}
+
+/* ------------------ HERO ------------------ */
 .main {
   width: 100%;
+  font-family: var(--font-main);
   will-change: transform;
 }
 
@@ -123,6 +111,15 @@
   height: 100%;
   object-fit: cover;
   will-change: transform;
+}
+
+.skyScale {
+  transform: scale(1.7) rotate(-20deg);
+  transform-origin: 50% 50%;
+}
+
+.bgScale {
+  transform: scale(1.8) rotate(-5deg);
   transform-origin: 50% 50%;
 }
 
@@ -132,14 +129,16 @@
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
+
   display: flex;
   flex-direction: column;
   gap: 5px;
+
   color: #fff;
   text-align: center;
   pointer-events: none;
   user-select: none;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .text h1 {
@@ -154,11 +153,11 @@
 .text h1:first-child {
   margin-left: -500px;
 }
+
 .text h1:last-child {
   margin-left: 200px;
 }
 
-/* Alan */
 .alan {
   position: absolute;
   left: 50%;
@@ -182,7 +181,6 @@
 }
 
 .btmbarInner {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -193,6 +191,7 @@
   text-align: right;
 }
 
+/* Footer typography */
 .footerTitle {
   font-size: 18px;
   font-weight: 800;
@@ -213,10 +212,12 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+
   animation: scrollBounce 1.2s ease-in-out infinite;
 }
 
@@ -234,137 +235,59 @@
 @keyframes scrollBounce {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateY(10px);
+    transform: translateX(-50%) translateY(10px);
   }
 }
 
-/* =========================
-   RESPONSIVE: EVERYTHING SHRINKS
-   ========================= */
+/* ------------------ ABOUT MASK OVERLAY ------------------ */
+.aboutOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
 
-/* Large tablets / small laptops */
-@media (max-width: 1024px) {
-  .root {
-    --mainStartScale: 1.35;
-    --skyStartScale: 1.35;
-    --bgStartScale: 1.45;
-
-    --skyEndScale: 1.12;
-    --bgEndScale: 1.05;
-
-    --alanEndScale: 2.1;
-    --parallaxMax: 26;
-    --textStartY: 210;
-  }
-
-  .navbar {
-    padding: 28px 24px;
-  }
-
-  .text h1 {
-    font-size: 9rem;
-  }
-  .text h1:first-child {
-    margin-left: -320px;
-  }
-  .text h1:last-child {
-    margin-left: 140px;
-  }
-
-  .btmbar {
-    padding: 36px 24px;
-  }
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: opacity;
 }
 
-/* Phones */
-@media (max-width: 768px) {
-  .root {
-    --mainStartScale: 1.15;
-    --skyStartScale: 1.15;
-    --bgStartScale: 1.22;
+.aboutOverlayMove {
+  position: absolute;
+  inset: 0;
 
-    --skyEndScale: 1.06;
-    --bgEndScale: 1.02;
+  display: grid;
+  place-items: center;
 
-    --alanStartScale: 1.7;
-    --alanEndScale: 1.85;
-    --alanEndBottom: -18%;
-
-    --textStartY: 160;
-    --parallaxMax: 14;
-  }
-
-  .navbar {
-    padding: 22px 18px;
-  }
-
-  .logoText {
-    font-size: 30px;
-  }
-
-  .text {
-    top: 12%;
-  }
-
-  .text h1 {
-    font-size: 6.2rem;
-  }
-  .text h1:first-child {
-    margin-left: -180px;
-  }
-  .text h1:last-child {
-    margin-left: 80px;
-  }
-
-  .alan {
-    height: 58%;
-  }
-
-  .btmbarInner {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .footerRight {
-    text-align: center;
-  }
-
-  .btmbarScroll {
-    position: static;
-    transform: none;
-  }
-
-  .btmbar {
-    padding: 26px 18px;
-  }
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-/* Very small phones */
-@media (max-width: 420px) {
-  .root {
-    --mainStartScale: 1.08;
-    --skyStartScale: 1.08;
-    --bgStartScale: 1.12;
+.aboutSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
 
-    --alanEndScale: 1.75;
-    --alanEndBottom: -15%;
+  transform: translateZ(0);
+}
 
-    --textStartY: 140;
-    --parallaxMax: 10;
-  }
+.aboutCutRect {
+  will-change: opacity;
+}
 
-  .text h1 {
-    font-size: 5.3rem;
-  }
-  .text h1:first-child {
-    margin-left: -150px;
-  }
-  .text h1:last-child {
-    margin-left: 60px;
-  }
+.cutLayer,
+.solidLayer {
+  position: absolute;
+  inset: 0;
+  will-change: opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.solidLayer {
+  opacity: 0;
 }

@@ -1,0 +1,46 @@
+.about {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  padding: 14vh 6vw 18vh;
+}
+
+.inner {
+  max-width: 980px;
+}
+
+.heading {
+  font-family: var(--font-main);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  margin: 0 0 20px 0;
+
+  /* responsive but strong */
+  font-size: clamp(44px, 6vw, 86px);
+}
+
+.headingIndent {
+  display: block;
+
+  /* “ME” starts below the “T” of ABOUT feel — tweak if needed */
+  padding-left: 2.3ch;
+}
+
+.lead {
+  margin: 0 0 16px 0;
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1.35;
+  opacity: 0.88;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.body {
+  margin: 0;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.55;
+  opacity: 0.78;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}

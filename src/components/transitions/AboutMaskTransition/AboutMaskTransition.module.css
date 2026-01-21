@@ -1,0 +1,19 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 1px; /* we pin the hero; this section doesn't need height */
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: transparent;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
