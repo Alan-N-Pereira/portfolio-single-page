@@ -26,7 +26,7 @@
 .pinWrap {
   position: relative;
   width: 100%;
-  height: 100vh; /* pinned by ScrollTrigger */
+  height: 100vh;
   overflow: hidden;
   background: #000;
 }
@@ -158,11 +158,12 @@
   margin-left: 200px;
 }
 
+/* ✅ Alan: leave transform alone (GSAP controls xPercent centering) */
 .alan {
   position: absolute;
   left: 50%;
   bottom: -150%;
-  transform: translateX(-50%) scale(2) rotate(-20deg);
+  transform: scale(2) rotate(-20deg);
   transform-origin: 50% 100%;
   height: 50%;
   max-width: none;
@@ -191,7 +192,6 @@
   text-align: right;
 }
 
-/* Footer typography */
 .footerTitle {
   font-size: 18px;
   font-weight: 800;
@@ -242,6 +242,7 @@
   }
 }
 
+/* ------------------ ABOUT MASK OVERLAY (CSS MASK VERSION) ------------------ */
 /* ------------------ ABOUT MASK OVERLAY ------------------ */
 .aboutOverlay {
   position: fixed;
@@ -249,34 +250,23 @@
   z-index: 999;
   pointer-events: none;
   opacity: 0;
-
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: opacity;
+  isolation: isolate;
 }
 
 .aboutOverlayMove {
   position: absolute;
   inset: 0;
-
   display: grid;
   place-items: center;
-
   will-change: transform;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
 
 .aboutSvg {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: block;
-
-  transform: translateZ(0);
-}
-
-.aboutCutRect {
-  will-change: opacity;
 }
 
 .cutLayer,
@@ -284,10 +274,39 @@
   position: absolute;
   inset: 0;
   will-change: opacity;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
 
 .solidLayer {
   opacity: 0;
+}
+
+.aboutIntro {
+  position: absolute;
+  top: 50vh; /* after ABOUT ME settles at top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, 86vw);
+  /* text-align: center; */
+
+  display: flex;
+  flex-direction: column;
+  /* gap: 14px; */
+
+  color: rgba(255, 255, 255, 0.88);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 2rem;
+  /* line-height: 1.45; */
+
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.aboutIntroTags {
+  margin-top: 6px;
+  font-weight: 600;
+  opacity: 0.95;
+  letter-spacing: 0.02em;
 }

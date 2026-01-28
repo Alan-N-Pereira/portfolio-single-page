@@ -77,23 +77,24 @@ export default function Hero() {
 
     if (!main || !sky || !bg || !alan || !title) return;
 
-    // Start states
     gsap.set(main, { scale: 1.5, rotate: -10, transformOrigin: "50% 50%" });
     gsap.set(sky, { scale: 1.5, rotate: -20, transformOrigin: "50% 50%" });
     gsap.set(bg, { scale: 1.8, rotate: -5, transformOrigin: "50% 50%" });
 
     gsap.set(alan, {
+      left: "50%",
+      xPercent: -50,
       bottom: "-150%",
       rotate: -20,
       scale: 2,
       transformOrigin: "50% 100%",
+      force3D: true,
     });
 
     gsap.set(title, { y: 250, opacity: 0 });
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // unlock scroll AFTER hero is fully ready
         document.documentElement.style.overflow = "";
         document.body.style.overflow = "";
         document.body.style.overflowX = "hidden";
@@ -111,7 +112,6 @@ export default function Hero() {
       )
       .to(title, { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.2");
 
-    // Parallax
     const quickSky = gsap.quickTo(sky, "x", { duration: 0.6, ease: "power3.out" });
     const quickBg = gsap.quickTo(bg, "x", { duration: 0.6, ease: "power3.out" });
     const quickTitle = gsap.quickTo(title, "x", { duration: 0.6, ease: "power3.out" });
@@ -132,7 +132,7 @@ export default function Hero() {
     };
   }, [showContent]);
 
-  // ---- 3) GTA-like pinned mask transition (Hero -> About) ----
+  // ---- 3) Mask transition ----
   useLayoutEffect(() => {
     if (!showContent) return;
 
@@ -146,16 +146,14 @@ export default function Hero() {
 
     if (!pinWrap || !heroMain || !heroTitle || !overlay || !overlayMove || !aboutSection) return;
 
-    // ✅ Grab layer wrappers (THIS is what we animate to avoid flicker)
     const cutLayer = pinWrap.querySelector<HTMLElement>("[data-cut-layer='true']");
     const solidLayer = pinWrap.querySelector<HTMLElement>("[data-solid-layer='true']");
-    if (!cutLayer || !solidLayer) return;
+    const aboutIntro = overlay.querySelector<HTMLElement>("[data-about-intro='true']");
+    if (!cutLayer || !solidLayer || !aboutIntro) return;
 
-    // initial visibility
     gsap.set(overlay, { autoAlpha: 0 });
     gsap.set(aboutSection, { autoAlpha: 0 });
 
-    // ✅ START WAY BIG (your request)
     gsap.set(overlayMove, {
       x: 0,
       y: 0,
@@ -164,9 +162,10 @@ export default function Hero() {
       force3D: true,
     });
 
-    // ✅ Start: cutout visible, solid hidden (animate THESE, not SVG internals)
     gsap.set(cutLayer, { autoAlpha: 1, force3D: true });
     gsap.set(solidLayer, { autoAlpha: 0, force3D: true });
+
+    gsap.set(aboutIntro, { autoAlpha: 0, y: 30 })
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -182,42 +181,21 @@ export default function Hero() {
         },
       });
 
-      // ✅ Make overlay appear immediately as scroll starts
       tl.to(overlay, { autoAlpha: 1, duration: 0.01 }, 0);
 
-      // ✅ Everything starts together (no waiting)
-      tl.to(
-        heroMain,
-        { scale: 0.97, duration: 0.6, ease: "power2.out", transformOrigin: "50% 50%" },
-        0
-      );
-
+      tl.to(heroMain, { scale: 0.97, duration: 0.6, ease: "power2.out", transformOrigin: "50% 50%" }, 0);
       tl.to(heroTitle, { autoAlpha: 0, y: -40, duration: 0.7, ease: "power2.out" }, 0);
-
-      // ✅ Hero fades away earlier
       tl.to(heroMain, { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 0.35);
 
-      // ✅ Shrink starts immediately too
-      tl.to(
-        overlayMove,
-        {
-          scale: 0.62,
-          duration: 1.2,
-          ease: "expo.inOut",
-        },
-        0
-      );
+      tl.to(overlayMove, { scale: 0.62, duration: 1.2, ease: "expo.inOut" }, 0);
 
-      // ✅ Flicker fix: crossfade LAYERS (fast + stable)
-      tl.to(cutLayer, { autoAlpha: 0 }, 0.55);
-      tl.to(solidLayer, { autoAlpha: 1}, 0.55);
+      tl.to(cutLayer, { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.55);
+      tl.to(solidLayer, { autoAlpha: 1, duration: 0.12, ease: "none" }, 0.55);
 
-      // settle into heading zone
       tl.to(
         overlayMove,
         {
           scale: 0.28,
-          // x: -window.innerWidth * 0.22,
           y: -window.innerHeight * 0.32,
           duration: 1.2,
           ease: "expo.inOut",
@@ -225,11 +203,16 @@ export default function Hero() {
         1.05
       );
 
-      // reveal real about section
-      // tl.to(aboutSection, { autoAlpha: 1, duration: 0.8, ease: "power2.out" }, 1.35);
-
-      // ✅ IMPORTANT: You said "About me should stay" → DO NOT fade overlay out
-      // tl.to(overlay, { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 2.2);
+      tl.to(
+        aboutIntro,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        1.9
+      );
 
       return () => tl.kill();
     }, pinWrap);
@@ -340,42 +323,52 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* ABOUT MASK OVERLAY */}
-            <div ref={aboutOverlayRef} className={styles.aboutOverlay} aria-hidden="true">
+            {/* ABOUT MASK OVERLAY (SVG MASK — stable) */}
+            <div ref={aboutOverlayRef} className={styles.aboutOverlay}>
               <div ref={aboutOverlayMoveRef} className={styles.aboutOverlayMove}>
-                {/* CUTOUT LAYER */}
+                {/* CUTOUT */}
                 <div className={styles.cutLayer} data-cut-layer="true">
-                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
                     <defs>
-                      <mask id="aboutCutoutMask">
-                        <rect width="100%" height="100%" fill="white" />
-                        <text x="500" y="280" fontSize="220" fontFamily="MainText" fontWeight="900" fill="black" letterSpacing="-6" textAnchor="middle">
-                          ABOUT
-                        </text>
-                        <text x="500" y="430" fontSize="220" fontFamily="MainText" fontWeight="900" fill="black" letterSpacing="-6" textAnchor="middle">
-                          <tspan>ME</tspan>
-                        </text>
+                      <mask id="aboutHoleMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="1000" height="600" fill="white" />
+                        {/* about-mask.svg MUST be black text on transparent */}
+                        <image
+                          href="/svg/about-mask.svg"
+                          x="0"
+                          y="0"
+                          width="1000"
+                          height="600"
+                          preserveAspectRatio="none"
+                        />
                       </mask>
                     </defs>
 
-                    {/* ✅ black always from start */}
-                    <rect x="0" y="0" width="1000" height="600" fill="#000" mask="url(#aboutCutoutMask)" />
+                    <rect x="0" y="0" width="1000" height="600" fill="black" mask="url(#aboutHoleMask)" />
                   </svg>
                 </div>
 
-                {/* SOLID LAYER */}
+                {/* SOLID */}
                 <div className={styles.solidLayer} data-solid-layer="true">
-                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-                    {/* ✅ black bg here too (important) */}
-                    <rect x="0" y="0" width="1000" height="600" fill="#000" />
-                    <text x="500" y="280" fontSize="220" fontFamily="MainText" fontWeight="900" fill="white" letterSpacing="-6" textAnchor="middle">
-                      ABOUT
-                    </text>
-                    <text x="500" y="430" fontSize="220" fontFamily="MainText" fontWeight="900" fill="white" letterSpacing="-6" textAnchor="middle">
-                      <tspan>ME</tspan>
-                    </text>
+                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+                    <image
+                      href="/svg/about-solid.svg"
+                      x="0"
+                      y="0"
+                      width="1000"
+                      height="600"
+                      preserveAspectRatio="none"
+                    />
                   </svg>
                 </div>
+              </div>
+
+              {/* ✅ Intro text that appears AFTER heading settles */}
+              <div className={styles.aboutIntro} data-about-intro="true">
+                <p>Mumbai-born. London-based.</p>
+                <p>Frontend developer building bold, interactive web experiences.</p>
+                <p>I focus on clean UI, smooth motion, and performance that feels invisible.</p>
+                <p className={styles.aboutIntroTags}>React • Next.js • TypeScript • GSAP</p>
               </div>
             </div>
           </div>
