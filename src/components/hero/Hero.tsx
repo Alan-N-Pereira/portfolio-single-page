@@ -214,6 +214,8 @@ export default function Hero() {
         1.9
       );
 
+      tl.to(aboutSection, { autoAlpha: 1, duration: 0.2, ease: "none" }, 1.05);
+
       return () => tl.kill();
     }, pinWrap);
 

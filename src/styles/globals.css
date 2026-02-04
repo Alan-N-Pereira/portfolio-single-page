@@ -18,6 +18,7 @@
   --font-mono: var(--font-geist-mono);
 
   --font-main: "MainText", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-artdeco: "ArtDeco", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 
   /* Handy layout constants */
   --container-max: 1200px;
@@ -112,6 +113,14 @@ table {
 @font-face {
   font-family: "MainText";
   src: url("/fonts/MainText.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ArtDeco";
+  src: url("/fonts/ArtDecoCondensed.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
