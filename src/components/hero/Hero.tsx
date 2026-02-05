@@ -151,6 +151,9 @@ export default function Hero() {
     const aboutIntro = overlay.querySelector<HTMLElement>("[data-about-intro='true']");
     if (!cutLayer || !solidLayer || !aboutIntro) return;
 
+    // Ensure no skew class at start
+    aboutIntro.classList.remove(styles.aboutIntroSkewOn);
+
     gsap.set(overlay, { autoAlpha: 0 });
     gsap.set(aboutSection, { autoAlpha: 0 });
 
@@ -165,7 +168,7 @@ export default function Hero() {
     gsap.set(cutLayer, { autoAlpha: 1, force3D: true });
     gsap.set(solidLayer, { autoAlpha: 0, force3D: true });
 
-    gsap.set(aboutIntro, { autoAlpha: 0, y: 30 })
+    gsap.set(aboutIntro, { autoAlpha: 0, y: 30 });
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -203,6 +206,19 @@ export default function Hero() {
         1.05
       );
 
+      // ✅ show AboutSection
+      tl.to(aboutSection, { autoAlpha: 1, duration: 0.2, ease: "none" }, 1.05);
+
+      // ✅ skew band ON only during transition window
+      tl.to(
+        {},
+        {
+          duration: 0.01,
+          onStart: () => aboutIntro.classList.add(styles.aboutIntroSkewOn),
+        },
+        1.15
+      );
+
       tl.to(
         aboutIntro,
         {
@@ -214,7 +230,15 @@ export default function Hero() {
         1.9
       );
 
-      tl.to(aboutSection, { autoAlpha: 1, duration: 0.2, ease: "none" }, 1.05);
+      // ✅ skew band OFF after transition settles
+      tl.to(
+        {},
+        {
+          duration: 0.01,
+          onStart: () => aboutIntro.classList.remove(styles.aboutIntroSkewOn),
+        },
+        2.35
+      );
 
       return () => tl.kill();
     }, pinWrap);
@@ -334,15 +358,7 @@ export default function Hero() {
                     <defs>
                       <mask id="aboutHoleMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="1000" height="600" fill="white" />
-                        {/* about-mask.svg MUST be black text on transparent */}
-                        <image
-                          href="/svg/about-mask.svg"
-                          x="0"
-                          y="0"
-                          width="1000"
-                          height="600"
-                          preserveAspectRatio="none"
-                        />
+                        <image href="/svg/about-mask.svg" x="0" y="0" width="1000" height="600" preserveAspectRatio="none" />
                       </mask>
                     </defs>
 
@@ -353,19 +369,12 @@ export default function Hero() {
                 {/* SOLID */}
                 <div className={styles.solidLayer} data-solid-layer="true">
                   <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
-                    <image
-                      href="/svg/about-solid.svg"
-                      x="0"
-                      y="0"
-                      width="1000"
-                      height="600"
-                      preserveAspectRatio="none"
-                    />
+                    <image href="/svg/about-solid.svg" x="0" y="0" width="1000" height="600" preserveAspectRatio="none" />
                   </svg>
                 </div>
               </div>
 
-              {/* ✅ Intro text that appears AFTER heading settles */}
+              {/* Intro text */}
               <div className={styles.aboutIntro} data-about-intro="true">
                 <p>Mumbai-born. London-based.</p>
                 <p>Frontend developer building bold, interactive web experiences.</p>

@@ -19,6 +19,7 @@
 
   --font-main: "MainText", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-artdeco: "ArtDeco", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-sgco: "SGCO", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 
   /* Handy layout constants */
   --container-max: 1200px;
@@ -125,6 +126,15 @@ table {
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "SGCO";
+  src: url("/fonts/SGCO.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* Reduced motion (important for GSAP/WebGL sites) */
 @media (prefers-reduced-motion: reduce) {
