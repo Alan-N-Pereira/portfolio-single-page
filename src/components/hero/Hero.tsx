@@ -77,8 +77,8 @@ export default function Hero() {
 
     if (!main || !sky || !bg || !alan || !title) return;
 
-    gsap.set(main, { scale: 1.5, rotate: -10, transformOrigin: "50% 50%" });
-    gsap.set(sky, { scale: 1.5, rotate: -20, transformOrigin: "50% 50%" });
+    gsap.set(main, { scale: 5, rotate: -10, transformOrigin: "50% 50%" });
+    gsap.set(sky, { scale: 5, rotate: -20, transformOrigin: "50% 50%" });
     gsap.set(bg, { scale: 1.8, rotate: -5, transformOrigin: "50% 50%" });
 
     gsap.set(alan, {
@@ -151,9 +151,6 @@ export default function Hero() {
     const aboutIntro = overlay.querySelector<HTMLElement>("[data-about-intro='true']");
     if (!cutLayer || !solidLayer || !aboutIntro) return;
 
-    // Ensure no skew class at start
-    aboutIntro.classList.remove(styles.aboutIntroSkewOn);
-
     gsap.set(overlay, { autoAlpha: 0 });
     gsap.set(aboutSection, { autoAlpha: 0 });
 
@@ -209,16 +206,6 @@ export default function Hero() {
       // ✅ show AboutSection
       tl.to(aboutSection, { autoAlpha: 1, duration: 0.2, ease: "none" }, 1.05);
 
-      // ✅ skew band ON only during transition window
-      tl.to(
-        {},
-        {
-          duration: 0.01,
-          onStart: () => aboutIntro.classList.add(styles.aboutIntroSkewOn),
-        },
-        1.15
-      );
-
       tl.to(
         aboutIntro,
         {
@@ -228,16 +215,6 @@ export default function Hero() {
           ease: "power2.out",
         },
         1.9
-      );
-
-      // ✅ skew band OFF after transition settles
-      tl.to(
-        {},
-        {
-          duration: 0.01,
-          onStart: () => aboutIntro.classList.remove(styles.aboutIntroSkewOn),
-        },
-        2.35
       );
 
       return () => tl.kill();
@@ -379,7 +356,7 @@ export default function Hero() {
                 <p>Mumbai-born. London-based.</p>
                 <p>Frontend developer building bold, interactive web experiences.</p>
                 <p>I focus on clean UI, smooth motion, and performance that feels invisible.</p>
-                <p className={styles.aboutIntroTags}>React • Next.js • TypeScript • GSAP</p>
+                <p className={styles.aboutIntroTags}>React • NextJS • Typescript •  UI Architecture • Performance Optimization</p>
               </div>
             </div>
           </div>
