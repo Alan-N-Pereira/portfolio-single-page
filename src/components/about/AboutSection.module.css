@@ -2,21 +2,19 @@
   position: relative;
   width: 100vw;
   background: #07080c;
-
-  /* IMPORTANT: allow the character to overlap into postcard */
   overflow: visible;
+  z-index: 1;
+  padding-bottom: clamp(48px, 8vh, 120px);
 }
 
 /* ---------- TOP PANEL ---------- */
 .topPanel {
   position: relative;
-  min-height: 110vh;
-
-  /* IMPORTANT: do NOT clip the character */
+  min-height: 108vh;
   overflow: visible;
-
   display: flex;
   align-items: center;
+  padding-top: 6vh;
 }
 
 /* Clips ONLY the background/overlays (not the character) */
@@ -112,7 +110,10 @@
   position: relative;
   z-index: 10;
   width: 100%;
+  min-height: 108vh;
   display: flex;
+  align-items: center;
+  padding-top: 4vh;
 }
 
 /* Text */
@@ -129,11 +130,12 @@
   font-family: var(--font-sgco);
 
   margin-left: 15%;
-  margin-top: 10%;
+  margin-top: 4vh;
   color: #fff;
 
   will-change: transform, opacity;
 }
+
 
 .kicker {
   font-size: min(calc(18vw / 3), calc(2560px * 0.23 / 3));
@@ -175,26 +177,26 @@
 /* Character ABOVE everything and allowed to overlap into postcard */
 .charLayer {
   position: absolute;
-  right: 3%;
-  bottom: -30%;
-  height: 72rem;
+  right: 5%;
+  bottom: -13vh;
+  height: 65rem;
   width: auto;
   object-fit: contain;
 
   z-index: 30;
   pointer-events: none;
 
-  will-change: transform, opacity;
+  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
 
 /* ---------- POSTCARD SECTION ---------- */
 .postcardWrap {
-  margin-top: 15vh;
+  margin-top: 0;
   position: relative;
-  min-height: 100vh;
-  padding: clamp(40px, 8vh, 90px) 0;
+  min-height: auto;
+  padding: clamp(56px, 10vh, 120px) 0 clamp(96px, 14vh, 180px);
   background: #07080c;
   z-index: 5;
 }
@@ -232,10 +234,11 @@
   z-index: 2;
 
   width: 70%;
-  margin: 5% auto;
+  margin: 0 auto;
 
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .postcardMedia {
@@ -266,6 +269,8 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+
+  padding-top: clamp(28px, 6vh, 72px);
 }
 
 .postcardSubkicker {

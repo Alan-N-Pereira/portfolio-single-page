@@ -13,6 +13,11 @@
   --background: #07070a;
   --foreground: #ffffff;
 
+  --base-1: #3d2fa9;
+  --base-2: #ff7722;
+  --base-3: #ff3d33;
+  --base-4: #785f47;
+
   /* Font vars from next/font in layout.tsx */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -23,6 +28,8 @@
 
   /* Handy layout constants */
   --container-max: 1200px;
+
+  --aboutHeaderH: 160px;
 }
 
 /* Document base */

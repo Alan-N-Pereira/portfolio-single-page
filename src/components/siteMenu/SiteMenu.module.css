@@ -1,0 +1,186 @@
+.menuRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  pointer-events: none;
+}
+
+.menuHidden {
+  opacity: 0;
+}
+
+.menuVisible {
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.menuButton {
+  position: fixed;
+  top: 28px;
+  right: 28px;
+  width: 68px;
+  height: 68px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 5003;
+}
+
+.menuButtonInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.menuLine {
+  position: absolute;
+  width: 34px;
+  height: 5px;
+  background: #fff;
+  border-radius: 999px;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
+}
+
+.menuLine:first-child {
+  transform: translateY(-6px);
+}
+
+.menuLine:last-child {
+  transform: translateY(6px);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(520px, 100vw);
+  height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 12, 0.98), rgba(5, 5, 7, 1)),
+    #050507;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.panelInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 120px 38px 36px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navItem {
+  border: none;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+
+  font-family: var(--font-main);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+
+  transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease;
+}
+
+.navItem:hover {
+  transform: translateX(12px);
+  color: #91dfec;
+}
+
+.panelBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+
+.socialLink {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-family: var(--font-sgco);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.socialLink:hover {
+  color: #91dfec;
+  transform: translateX(6px);
+}
+
+.contactBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contactName {
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.contactMeta {
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-sgco);
+  font-size: 0.95rem;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 640px) {
+  .menuButton {
+    top: 18px;
+    right: 18px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .panelInner {
+    padding: 96px 24px 28px;
+  }
+
+  .navItem {
+    font-size: clamp(2.2rem, 12vw, 3.6rem);
+  }
+}

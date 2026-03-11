@@ -1,0 +1,205 @@
+.projectsShell {
+  position: relative;
+  width: 100%;
+  background: #e3e3db;
+}
+
+.projectsTrack {
+  position: relative;
+  width: 100%;
+  min-height: 560vh;
+  background: #e3e3db;
+}
+
+.stickyCards {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #e3e3db;
+  perspective: 1200px;
+}
+
+.cardsWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+.card {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 65%;
+  height: 58%;
+  transform-origin: center bottom;
+  will-change: transform;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.isFront {
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.card1 { z-index: 5; }
+.card2 { z-index: 4; }
+.card3 { z-index: 3; }
+.card4 { z-index: 2; }
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 1rem;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.card1 .cardInner { background-color: var(--base-1, #3d2fa9); }
+.card2 .cardInner { background-color: var(--base-2, #ff7722); }
+.card3 .cardInner { background-color: var(--base-3, #ff3d33); }
+.card4 .cardInner { background-color: var(--base-4, #785f47); }
+
+.cardInner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 42%
+  );
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.isFront:hover .cardInner::before {
+  opacity: 1;
+}
+
+/* subtle top sheen */
+.cardInner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.14) 0%,
+    rgba(255,255,255,0.04) 22%,
+    rgba(255,255,255,0.00) 46%,
+    rgba(0,0,0,0.08) 100%
+  );
+  opacity: 0.9;
+}
+
+.col {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.col:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.5rem;
+  transform: translateZ(24px);
+}
+
+.col:nth-child(2) {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transform: translateZ(18px);
+}
+
+.col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card h1 {
+  text-transform: uppercase;
+  font-family: var(--font-sgco);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+}
+
+.card p {
+  text-transform: uppercase;
+  font-family: var(--font-sgco);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.86);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.mediaGradient {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.22), rgba(0,0,0,0.16)),
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+  border: 1px solid rgba(255,255,255,0.16);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.titleContainer {
+  position: absolute;
+  top: 4vh;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.title h1 {
+  font-family: var(--font-main);
+  font-size: 5rem;
+  color: #07080c;
+  font-weight: 800;
+}
+
+@media (max-width: 1000px) {
+  .projectsTrack {
+    min-height: 480vh;
+  }
+
+  .card {
+    width: calc(100% - 4rem);
+    height: 75%;
+  }
+
+  .cardInner {
+    flex-direction: column;
+  }
+
+  .col {
+    width: 100%;
+  }
+}

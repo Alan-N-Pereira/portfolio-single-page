@@ -30,100 +30,100 @@ const AboutSection = forwardRef<HTMLElement, Props>(function AboutSection(_props
     else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
   };
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const topPanel = topPanelRef.current;
+ useLayoutEffect(() => {
+  const section = sectionRef.current;
+  const topPanel = topPanelRef.current;
 
-    const sceneClip = sceneClipRef.current;
-    const scene = sceneRef.current;
-    const bg = bgRef.current;
+  const sceneClip = sceneClipRef.current;
+  const bg = bgRef.current;
 
-    const character = charRef.current;
-    const copy = copyRef.current;
+  const character = charRef.current;
+  const copy = copyRef.current;
 
-    const postcardWrap = postcardWrapRef.current;
-    const veil = veilRef.current;
+  const postcardWrap = postcardWrapRef.current;
+  const veil = veilRef.current;
 
-    if (!section || !topPanel || !sceneClip || !scene || !bg || !character || !copy || !postcardWrap || !veil) return;
+  if (!section || !topPanel || !sceneClip || !bg || !character || !copy || !postcardWrap || !veil) return;
 
-    const ctx = gsap.context(() => {
-      // -----------------------
-      // A) Set initial states
-      // -----------------------
-      gsap.set(sceneClip, { ["--skewY" as any]: "90px" }); // start skewed
-      gsap.set(bg, { y: -24, scale: 1.05, transformOrigin: "50% 50%", force3D: true });
-      gsap.set(character, { y: -30, scale: 1.02, transformOrigin: "60% 70%", force3D: true });
-      gsap.set(copy, { autoAlpha: 0, y: 24 });
-      gsap.set(veil, { autoAlpha: 0 });
+  const ctx = gsap.context(() => {
+    // Initial states
+    gsap.set(sceneClip, { ["--skewY" as any]: "60px" });
+    gsap.set(bg, {
+      y: -30,
+      scale: 1.06,
+      transformOrigin: "50% 50%",
+      force3D: true,
+      autoAlpha: 1,
+    });
+    gsap.set(character, {
+      y: 40,
+      scale: 1.02,
+      transformOrigin: "60% 70%",
+      force3D: true,
+      autoAlpha: 1,
+    });
+    gsap.set(copy, { autoAlpha: 0, y: 40 });
+    gsap.set(veil, { autoAlpha: 0 });
 
-      // -----------------------
-      // B) Skew → straight as you scroll into the topPanel
-      // (this is the effect you want)
-      // -----------------------
-      gsap.to(sceneClip, {
-        ["--skewY" as any]: "0px",
-        ease: "none",
-        scrollTrigger: {
-          trigger: topPanel,
-          start: "top bottom",   // when section starts entering
-          end: "top top",        // when section hits top
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+    // 1) Section enters -> skew straightens + content reveals
+    const enterTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: topPanel,
+        start: "top 55%",
+        end: "top top",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
 
-      // -----------------------
-      // C) Your existing parallax reveal
-      // -----------------------
-      const revealTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: topPanel,
-          start: "top 80%",
-          end: "bottom top",
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+    enterTl
+      .to(sceneClip, { ["--skewY" as any]: "0px", ease: "none" }, 0)
+      .to(bg, { y: 10, scale: 1, ease: "none" }, 0)
+      .to(character, { y: 0, scale: 1, ease: "none" }, 0.14)
+      .to(copy, { autoAlpha: 1, y: 0, ease: "none" }, 0.18);
 
-      revealTl
-        .to(bg, { y: 24, scale: 1, ease: "none" }, 0)
+    // 2) Mild continuous parallax while scrolling through panel
+    gsap.to(bg, {
+      y: 50,
+      ease: "none",
+      scrollTrigger: {
+        trigger: topPanel,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
 
-        // copy comes in and drifts up
-        .to(copy, { autoAlpha: 1, y: 0, ease: "none" }, 0.05)
-        .to(copy, { y: -40, ease: "none" }, 0.35)
+    gsap.to(character, {
+      y: -18,
+      ease: "none",
+      scrollTrigger: {
+        trigger: topPanel,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
 
-        // character comes in and drifts up too
-        .to(character, { y: 0, scale: 1, ease: "none" }, 0.05)
-        .to(character, { y: -55, ease: "none" }, 0.35);
+    // 3) Postcard veil appears as postcard comes in
+    gsap.to(veil, {
+      autoAlpha: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: postcardWrap,
+        start: "top 85%",
+        end: "top 35%",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+  }, section);
 
-      // -----------------------
-      // D) Transition into postcard (veil in + hero fade out)
-      // -----------------------
-      const fadeTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: postcardWrap,
-          start: "top 80%",
-          end: "top 20%",
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      fadeTl
-        .to(veil, { autoAlpha: 1, ease: "none" }, 0)
-        .to(character, { autoAlpha: 0, y: -90, ease: "none" }, 0) // add vertical movement
-        .to(copy, { autoAlpha: 0, y: -30, ease: "none" }, 0)
-        .to(bg, { autoAlpha: 0.10, ease: "none" }, 0);
-
-      return () => {
-        revealTl.kill();
-        fadeTl.kill();
-      };
-    }, section);
-
-    ScrollTrigger.refresh();
-    return () => ctx.revert();
-  }, []);
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+  return () => ctx.revert();
+}, []);
 
   return (
     <section ref={setRefs} className={styles.aboutSection}>
