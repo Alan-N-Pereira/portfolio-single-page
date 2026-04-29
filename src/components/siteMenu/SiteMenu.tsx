@@ -13,9 +13,10 @@ const navItems = [
 
 type SiteMenuProps = {
   visible: boolean;
+  onNavigate: (label: string, id: string) => void;
 };
 
-export default function SiteMenu({ visible }: SiteMenuProps) {
+export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
   const [open, setOpen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +43,9 @@ export default function SiteMenu({ visible }: SiteMenuProps) {
     const bottomLine = bottomLineRef.current;
     const contact = contactRef.current;
 
-    if (!root || !backdrop || !panel || !topLine || !bottomLine || !contact) return;
+    if (!root || !backdrop || !panel || !topLine || !bottomLine || !contact) {
+      return;
+    }
 
     const ctx = gsap.context(() => {
       gsap.set(backdrop, { autoAlpha: 0 });
@@ -128,7 +131,7 @@ export default function SiteMenu({ visible }: SiteMenuProps) {
 
     if (open) tl.play();
     else tl.reverse();
-    }, [open]);
+  }, [open]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -139,22 +142,18 @@ export default function SiteMenu({ visible }: SiteMenuProps) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const scrollToSection = (id: string) => {
+  const handleNavClick = (label: string, id: string) => {
     setOpen(false);
-
-    window.setTimeout(() => {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 220);
+    onNavigate(label, id);
   };
 
   return (
-    <div ref={rootRef} className={`${styles.menuRoot} ${visible ? styles.menuVisible : styles.menuHidden}`}>
+    <div
+      ref={rootRef}
+      className={`${styles.menuRoot} ${
+        visible ? styles.menuVisible : styles.menuHidden
+      }`}
+    >
       <button
         type="button"
         className={styles.menuButton}
@@ -185,7 +184,7 @@ export default function SiteMenu({ visible }: SiteMenuProps) {
                 }}
                 type="button"
                 className={styles.navItem}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => handleNavClick(item.label, item.id)}
               >
                 {item.label}
               </button>

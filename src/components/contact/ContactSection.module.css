@@ -1,0 +1,133 @@
+.contactSection {
+  position: relative;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(130, 160, 255, 0.08), transparent 28%),
+    #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 1.5rem;
+}
+
+.inner {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kicker {
+  margin: 0 0 1rem;
+  font-family: var(--font-sgco);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-main);
+  font-size: 10rem;
+  font-weight: 900;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.description {
+  width: min(640px, 100%);
+  margin: 1.5rem auto 0;
+  font-family: var(--font-sgco);
+  font-size: 1.8rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  min-height: 52px;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.primaryBtn {
+  background: #82a0ff;
+  color: #0a0d16;
+  font-family: var(--font-sgco);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  
+}
+
+.secondaryBtn {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  font-family: var(--font-sgco);
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover {
+  transform: translateY(-2px);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.infoCard {
+  padding: 1.4rem 1.2rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.infoLabel {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-sgco);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.infoCard p {
+  margin: 0;
+  font-family: var(--font-sgco);
+  letter-spacing: 0.1em;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+@media (max-width: 900px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}

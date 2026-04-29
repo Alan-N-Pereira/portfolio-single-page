@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -10,8 +10,9 @@ import styles from "./Hero.module.css";
 gsap.registerPlugin(ScrollTrigger);
 
 type HeroProps = {
-  aboutSectionRef: RefObject<HTMLElement| null>;
+  aboutSectionRef: RefObject<HTMLElement | null>;
   onIntroComplete?: () => void;
+  onNavigate?: (label: string, id: string) => void;
 };
 
 type BubbleItem = {
@@ -20,9 +21,13 @@ type BubbleItem = {
   actionTarget?: string;
 };
 
-export default function Hero({ aboutSectionRef, onIntroComplete }: HeroProps) {
+export default function Hero({
+  aboutSectionRef,
+  onIntroComplete,
+  onNavigate,
+}: HeroProps) {
   const [showContent, setShowContent] = useState(false);
-  const [aboutSettled, setAboutSettled] = useState(false); // ✅ handoff: fixed -> in-flow
+  const [aboutSettled, setAboutSettled] = useState(false);
   const [showAboutBody, setShowAboutBody] = useState(false);
   const [bubbleIndex, setBubbleIndex] = useState(0);
 
@@ -34,17 +39,14 @@ export default function Hero({ aboutSectionRef, onIntroComplete }: HeroProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const pinWrapRef = useRef<HTMLDivElement | null>(null);
 
-  // A real section in the page flow that will hold the title+intro after pin ends
   const aboutFlowWrapRef = useRef<HTMLElement | null>(null);
 
-  // Hero refs
   const heroMainRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
   const skyRef = useRef<HTMLImageElement | null>(null);
   const bgRef = useRef<HTMLImageElement | null>(null);
   const alanRef = useRef<HTMLImageElement | null>(null);
 
-  // About overlay refs
   const aboutOverlayRef = useRef<HTMLDivElement | null>(null);
   const aboutOverlayMoveRef = useRef<HTMLDivElement | null>(null);
   const aboutIntroRef = useRef<HTMLDivElement | null>(null);
@@ -52,35 +54,50 @@ export default function Hero({ aboutSectionRef, onIntroComplete }: HeroProps) {
   const aboutBodyRef = useRef<HTMLDivElement | null>(null);
 
   const bubbleItems = useMemo<BubbleItem[]>(
-  () => [
-    {
-      text: "Hi, I am Alan — Web Developer / Front-End Developer.",
-    },
-    {
-      text: "Open to work. Check out my projects.",
-      actionLabel: "View Projects",
-      actionTarget: "projects",
-    },
-    {
-      text: "Want to work together? Let’s get in touch.",
-      actionLabel: "Contact Me",
-      actionTarget: "contact",
-    },
-  ],
-  []
-);
+    () => [
+      {
+        text: "Hi, I am Alan — Web Developer / Front-End Developer.",
+      },
+      {
+        text: "Open to work. Check out my projects.",
+        actionLabel: "View Projects",
+        actionTarget: "projects",
+      },
+      {
+        text: "Want to work together? Let’s get in touch.",
+        actionLabel: "Contact Me",
+        actionTarget: "contact",
+      },
+    ],
+    []
+  );
 
-const scrollToSection = (id: string) => {
-  const el = document.getElementById(id);
-  if (!el) return;
+  const handleBubbleNavigate = (id: string) => {
+    if (onNavigate) {
+      const label =
+        id === "home"
+          ? "Home"
+          : id === "about"
+          ? "About"
+          : id === "projects"
+          ? "Projects"
+          : id === "contact"
+          ? "Contact"
+          : id;
 
-  el.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-};
+      onNavigate(label, id);
+      return;
+    }
 
-  // ---- 1) Intro HI mask ----
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
@@ -114,10 +131,11 @@ const scrollToSection = (id: string) => {
       "-=1.8"
     );
 
-    return () => {tl.kill()};
-  }, []);
+    return () => {
+      tl.kill();
+    };
+  }, [onIntroComplete]);
 
-  // ---- 2) Hero reveal + parallax ----
   useEffect(() => {
     if (!showContent) return;
 
@@ -159,8 +177,16 @@ const scrollToSection = (id: string) => {
     });
 
     tl.to(main, { scale: 1, rotate: 0, duration: 1, ease: "expo.inOut" })
-      .to(sky, { scale: 1.2, rotate: 0, duration: 1, ease: "expo.inOut" }, "-=1.0")
-      .to(bg, { scale: 1.1, rotate: 0, duration: 1, ease: "expo.inOut" }, "-=0.8")
+      .to(
+        sky,
+        { scale: 1.2, rotate: 0, duration: 1, ease: "expo.inOut" },
+        "-=1.0"
+      )
+      .to(
+        bg,
+        { scale: 1.1, rotate: 0, duration: 1, ease: "expo.inOut" },
+        "-=0.8"
+      )
       .to(
         alan,
         { scale: 2.4, rotate: 0, bottom: "-25%", duration: 2, ease: "expo.inOut" },
@@ -227,7 +253,6 @@ const scrollToSection = (id: string) => {
     };
   }, [showBubble, bubbleIndex, bubbleItems]);
 
-  // ---- 3) Mask transition (shrink + settle) then handoff to in-flow ----
   useLayoutEffect(() => {
     if (!showContent) return;
 
@@ -238,17 +263,25 @@ const scrollToSection = (id: string) => {
     const overlay = aboutOverlayRef.current;
     const overlayMove = aboutOverlayMoveRef.current;
     const aboutIntro = aboutIntroRef.current;
-    const aboutBody = aboutBodyRef.current
+    const aboutBody = aboutBodyRef.current;
 
-    if (!pinWrap || !heroMain || !heroTitle || !overlay || !overlayMove ||  !aboutIntro || !aboutBody) return;
+    if (
+      !pinWrap ||
+      !heroMain ||
+      !heroTitle ||
+      !overlay ||
+      !overlayMove ||
+      !aboutIntro ||
+      !aboutBody
+    ) {
+      return;
+    }
 
-    // ✅ FIX: these are NOT inside pinWrap anymore
     const cutLayer = overlay.querySelector<HTMLElement>("[data-cut-layer='true']");
     const solidLayer = overlay.querySelector<HTMLElement>("[data-solid-layer='true']");
     if (!cutLayer || !solidLayer) return;
 
     setAboutSettled(false);
-
     setShowAboutBody(false);
 
     gsap.set(overlay, { autoAlpha: 0 });
@@ -265,10 +298,6 @@ const scrollToSection = (id: string) => {
     gsap.set(solidLayer, { autoAlpha: 0 });
 
     gsap.set(aboutIntro, { autoAlpha: 0, y: 20 });
-
-    // gsap.set(aboutBodyRef.current, {
-    //   opacity: 0
-    // });
 
     const ctx = gsap.context(() => {
       const endDistance = window.innerHeight * 0.49;
@@ -307,44 +336,15 @@ const scrollToSection = (id: string) => {
         1.0
       );
 
-      tl.to(aboutIntro, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.40);
+      tl.to(aboutIntro, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.4);
 
       tl.to({}, { duration: 0.3 });
 
-      // ✅ 2) Fade OUT title + intro together
       tl.to([overlayMove, aboutIntro], {
         autoAlpha: 0,
         duration: 0.35,
         ease: "power2.out",
       });
-
-      // ScrollTrigger.create({
-      //   trigger: aboutFlowWrapRef.current,
-      //   start: "top 70%",
-      //   once: true,   
-      //   onEnter: () => {
-      //     gsap.to(aboutBody, {
-      //       autoAlpha: 1,
-      //       y: 0,
-      //       duration: 0.8,
-      //       ease: "power2.out"
-      //     });
-      //   },
-        // onLeaveBack: () => {
-        //   gsap.set(aboutBody, {
-        //     autoAlpha: 0,
-        //     y: 30
-        //   });
-        // }
-      // });
-
-      // ✅ 3) Fade IN aboutBody after they disappear
-      // tl.to(aboutBody, {
-      //   autoAlpha: 1,
-      //   y: 0,
-      //   duration: 0.6,
-      //   ease: "power2.out",
-      // }, ">-0.25");
 
       const st = tl.scrollTrigger!;
 
@@ -352,69 +352,19 @@ const scrollToSection = (id: string) => {
         trigger: pinWrap,
         start: "top top",
         end: () => `+=${endDistance}`,
-
         onUpdate: (self) => {
           const p = self.progress;
-
-          // body appears first, while still centered
           setShowAboutBody(p > 0.62);
-
-          // overlay collapses slightly later, so body joins page flow
           setAboutSettled(p > 0.66);
         },
-
-        // onLeave: () => {
-        //   // lock to final frame
-        //   tl.progress(1);
-
-        //   // switch to in-flow
-        //   setAboutSettled(true);
-        //   setShowAboutBody(true);
-
-        //   requestAnimationFrame(() => {
-       
-
-        //     gsap.set(overlay, { autoAlpha: 1 });
-        //     gsap.set(overlayMove, { autoAlpha: 0 });
-        //     gsap.set(aboutIntro, { autoAlpha: 0, y: 0 });
-
-        //     // ✅ IMPORTANT: disable the pinhole ScrollTrigger while in-flow
-        //     st.disable();
-            
-        //     ScrollTrigger.refresh();
-        //   });
-        // },
-
-        // onEnterBack: () => {
-        //   // ✅ switch back to fixed mode
-        //   setAboutSettled(false);
-        //   setShowAboutBody(false);
-
-        //   gsap.set(aboutIntro, {
-        //     autoAlpha: 0,
-        //     y: 20,
-        //   });
-
-        //   gsap.set(overlayMove, {
-        //     autoAlpha: 1,
-        //     clearProps: "transform,x,y",
-        //   });
-
-        //   requestAnimationFrame(() => {
-
-        //     // ✅ IMPORTANT: re-enable pinhole ScrollTrigger so it replays
-        //     st.enable();
-
-        //     ScrollTrigger.refresh();
-        //   });
-        // },
       });
+
       return () => {
         handoffST.kill();
         st.kill();
         tl.kill();
       };
-    }, rootRef); // ✅ FIX: scope includes overlay now
+    }, rootRef);
 
     ScrollTrigger.refresh();
     return () => ctx.revert();
@@ -422,7 +372,6 @@ const scrollToSection = (id: string) => {
 
   return (
     <div ref={rootRef} className={styles.root}>
-      {/* INTRO HI MASK */}
       {!showContent && (
         <div className={styles.svgOverlay}>
           <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
@@ -445,7 +394,13 @@ const scrollToSection = (id: string) => {
               </mask>
             </defs>
 
-            <image href="/hero/bg.png" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" mask="url(#hiMask)" />
+            <image
+              href="/hero/bg.png"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMidYMid slice"
+              mask="url(#hiMask)"
+            />
 
             <g className="hi-solid">
               <text
@@ -466,9 +421,13 @@ const scrollToSection = (id: string) => {
 
       {showContent && (
         <>
-          {/* HERO pinned block */}
           <div ref={pinWrapRef} className={styles.pinWrap}>
-            <div ref={heroMainRef} className={styles.main} data-main="true" data-hero="true">
+            <div
+              ref={heroMainRef}
+              className={styles.main}
+              data-main="true"
+              data-hero="true"
+            >
               <div className={styles.landing}>
                 <div className={styles.navbar}>
                   <div className={styles.logo}>
@@ -477,15 +436,32 @@ const scrollToSection = (id: string) => {
                 </div>
 
                 <div className={styles.imagesDiv}>
-                  <img ref={skyRef} className={`${styles.sky} ${styles.skyScale}`} src="/hero/sky.png" alt="" />
-                  <img ref={bgRef} className={`${styles.bg} ${styles.bgScale}`} src="/hero/bg.png" alt="" />
+                  <img
+                    ref={skyRef}
+                    className={`${styles.sky} ${styles.skyScale}`}
+                    src="/hero/sky.png"
+                    alt=""
+                  />
+                  <img
+                    ref={bgRef}
+                    className={`${styles.bg} ${styles.bgScale}`}
+                    src="/hero/bg.png"
+                    alt=""
+                  />
 
                   <div ref={heroTitleRef} className={styles.text} data-hero-title="true">
                     <h1 className={styles.textWeb}>Web</h1>
                     <h1 className={styles.textDev}>Developer</h1>
                   </div>
 
-                  <img ref={alanRef} className={styles.alan} data-alan="true" src="/hero/alan1.png" alt="" />
+                  <img
+                    ref={alanRef}
+                    className={styles.alan}
+                    data-alan="true"
+                    src="/hero/alan1.png"
+                    alt=""
+                  />
+
                   {showContent && (
                     <div ref={heroBubbleWrapRef} className={styles.heroBubbleWrap}>
                       <div className={styles.heroBubble}>
@@ -500,7 +476,11 @@ const scrollToSection = (id: string) => {
                             <button
                               type="button"
                               className={styles.heroBubbleButton}
-                              onClick={() => scrollToSection(bubbleItems[bubbleIndex].actionTarget!)}
+                              onClick={() =>
+                                handleBubbleNavigate(
+                                  bubbleItems[bubbleIndex].actionTarget!
+                                )
+                              }
                             >
                               {bubbleItems[bubbleIndex].actionLabel}
                             </button>
@@ -519,11 +499,18 @@ const scrollToSection = (id: string) => {
 
                     <div className={styles.btmbarScroll}>
                       <h3 className={styles.scrollText}>Scroll Down</h3>
-                      <img className={styles.scrollArrow} src="/hero/downSymbol.png" alt="" aria-hidden="true" />
+                      <img
+                        className={styles.scrollArrow}
+                        src="/hero/downSymbol.png"
+                        alt=""
+                        aria-hidden="true"
+                      />
                     </div>
 
                     <div className={styles.footerRight}>
-                      <p className={styles.footerTitle}>Web Developer / Frontend Engineer</p>
+                      <p className={styles.footerTitle}>
+                        Web Developer / Frontend Engineer
+                      </p>
                       <p className={styles.footerSub}>Based in London</p>
                     </div>
                   </div>
@@ -532,28 +519,64 @@ const scrollToSection = (id: string) => {
             </div>
           </div>
 
-          {/* ✅ In-page flow wrapper (this is where the title+intro live after pin ends) */}
           <section ref={aboutFlowWrapRef} className={styles.aboutFlowWrap}>
             <div
               ref={aboutOverlayRef}
-              className={`${styles.aboutOverlay} ${aboutSettled ? `${styles.aboutOverlayInFlow} ${styles.aboutOverlayCollapsed}` : ""}`}
+              className={`${styles.aboutOverlay} ${
+                aboutSettled
+                  ? `${styles.aboutOverlayInFlow} ${styles.aboutOverlayCollapsed}`
+                  : ""
+              }`}
             >
               <div ref={aboutOverlayMoveRef} className={styles.aboutOverlayMove}>
                 <div className={styles.cutLayer} data-cut-layer="true">
-                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+                  <svg
+                    className={styles.aboutSvg}
+                    viewBox="0 0 1000 600"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
                     <defs>
-                      <mask id="aboutHoleMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+                      <mask
+                        id="aboutHoleMask"
+                        maskUnits="userSpaceOnUse"
+                        maskContentUnits="userSpaceOnUse"
+                      >
                         <rect x="0" y="0" width="1000" height="600" fill="white" />
-                        <image href="/svg/about-mask.svg" x="0" y="0" width="1000" height="600" preserveAspectRatio="none" />
+                        <image
+                          href="/svg/about-mask.svg"
+                          x="0"
+                          y="0"
+                          width="1000"
+                          height="600"
+                          preserveAspectRatio="none"
+                        />
                       </mask>
                     </defs>
-                    <rect x="0" y="0" width="1000" height="600" fill="black" mask="url(#aboutHoleMask)" />
+                    <rect
+                      x="0"
+                      y="0"
+                      width="1000"
+                      height="600"
+                      fill="black"
+                      mask="url(#aboutHoleMask)"
+                    />
                   </svg>
                 </div>
 
                 <div className={styles.solidLayer} data-solid-layer="true">
-                  <svg className={styles.aboutSvg} viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
-                    <image href="/svg/about-solid.svg" x="0" y="0" width="1000" height="600" preserveAspectRatio="none" />
+                  <svg
+                    className={styles.aboutSvg}
+                    viewBox="0 0 1000 600"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <image
+                      href="/svg/about-solid.svg"
+                      x="0"
+                      y="0"
+                      width="1000"
+                      height="600"
+                      preserveAspectRatio="none"
+                    />
                   </svg>
                 </div>
               </div>
@@ -561,29 +584,39 @@ const scrollToSection = (id: string) => {
               <div ref={aboutIntroRef} className={styles.aboutIntro}>
                 <p>Mumbai-born. London-based.</p>
                 <p>Frontend developer building bold, interactive web experiences.</p>
-                <p>I focus on clean UI, smooth motion, and performance that feels invisible.</p>
+                <p>
+                  I care about usability, performance, and interfaces that feel
+                  clear from the first interaction.
+                </p>
                 <p className={styles.aboutIntroTags}>
                   React • NextJS • TypeScript • UI Architecture • Performance Optimization
                 </p>
               </div>
             </div>
 
-            <div ref={aboutBodyRef} className={`${styles.aboutBody} ${showAboutBody ? styles.aboutBodyVisible : ""} `}>
+            <div
+              ref={aboutBodyRef}
+              className={`${styles.aboutBody} ${
+                showAboutBody ? styles.aboutBodyVisible : ""
+              }`}
+            >
               <p>
-                I design and build immersive web experiences with React, TypeScript and
-                modern animation systems.
+                I’ve always been interested in what makes a website feel good to use.
               </p>
 
               <p>
-                My focus is creating interfaces that feel alive and thoughtful, with layout systems designed to keep performance hidden.
+                That curiosity first pulled me into frontend development, then gradually
+                shaped how I think about design, performance, and the details users
+                notice without realising it.
               </p>
 
               <p>
-                I enjoy turning complex ideas into elegant UI systems that scale.
+                The more I built, the more I understood that good frontend work is not
+                just about making things work it is about making them feel right.
               </p>
 
               <p className={styles.callToAction}>
-                Scroll Down to know more About Me.
+                Scroll to see the story behind that.
               </p>
             </div>
           </section>

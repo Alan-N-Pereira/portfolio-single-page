@@ -1,14 +1,14 @@
 .projectsShell {
   position: relative;
   width: 100%;
-  background: #e3e3db;
+  background: #000000;
 }
 
 .projectsTrack {
   position: relative;
   width: 100%;
-  min-height: 560vh;
-  background: #e3e3db;
+  min-height: 500vh;
+  background: #000000;
 }
 
 .stickyCards {
@@ -17,8 +17,8 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #e3e3db;
-  perspective: 1200px;
+  background: #000000;
+  perspective: 1400px;
 }
 
 .cardsWrap {
@@ -26,14 +26,16 @@
   width: 100%;
   height: 100%;
   z-index: 5;
+  transform: rotate(-1.2deg);
+  transform-origin: center center;
 }
 
 .card {
   position: absolute;
-  top: 60%;
+  top: 54%;
   left: 50%;
-  width: 65%;
-  height: 58%;
+  width: min(78vw, 1180px);
+  height: min(68vh, 760px);
   transform-origin: center bottom;
   will-change: transform;
   overflow: visible;
@@ -45,42 +47,47 @@
   z-index: 20;
 }
 
-.card1 { z-index: 5; }
-.card2 { z-index: 4; }
-.card3 { z-index: 3; }
-.card4 { z-index: 2; }
+.card1 {
+  z-index: 5;
+}
+
+.card2 {
+  z-index: 4;
+}
+
+.card3 {
+  z-index: 3;
+}
+
+.card4 {
+  z-index: 2;
+}
 
 .cardInner {
   position: relative;
   width: 100%;
   height: 100%;
-  display: flex;
-  gap: 1rem;
-  padding: 2.5rem;
-  border-radius: 1rem;
-  overflow: hidden;
+  padding: 0;
+  border-radius: 18px;
+  overflow: visible;
   transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+  border: none;
+  background: transparent;
+  box-shadow: none;
   cursor: pointer;
 }
-
-.card1 .cardInner { background-color: var(--base-1, #3d2fa9); }
-.card2 .cardInner { background-color: var(--base-2, #ff7722); }
-.card3 .cardInner { background-color: var(--base-3, #ff3d33); }
-.card4 .cardInner { background-color: var(--base-4, #785f47); }
 
 .cardInner::before {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: 18px;
   pointer-events: none;
-  border-radius: inherit;
   background: radial-gradient(
-    320px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.18),
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.14),
     transparent 42%
   );
   opacity: 0;
@@ -91,115 +98,258 @@
   opacity: 1;
 }
 
-/* subtle top sheen */
-.cardInner::after {
-  content: "";
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 18px 18px 22px 18px;
+  border-radius: 10px;
+  background: #f3efe4;
+  transform: translateZ(24px);
+  overflow: hidden;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.35) inset;
+}
+
+.artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.card1 .artwork {
+  background:
+    linear-gradient(180deg, rgba(12, 28, 61, 0.12), rgba(6, 10, 18, 0.15)),
+    linear-gradient(135deg, #5eb4d8 0%, #37639f 45%, #15294c 100%);
+}
+
+.card2 .artwork {
+  background:
+    linear-gradient(180deg, rgba(40, 16, 8, 0.08), rgba(15, 8, 4, 0.18)),
+    linear-gradient(135deg, #f2b169 0%, #d96a2a 46%, #6a2410 100%);
+}
+
+.card3 .artwork {
+  background:
+    linear-gradient(180deg, rgba(33, 8, 13, 0.08), rgba(14, 4, 6, 0.18)),
+    linear-gradient(135deg, #ef7f96 0%, #b52f45 48%, #51111c 100%);
+}
+
+.card4 .artwork {
+  background:
+    linear-gradient(180deg, rgba(29, 22, 11, 0.08), rgba(12, 9, 4, 0.18)),
+    linear-gradient(135deg, #d3bc84 0%, #947645 48%, #2c2011 100%);
+}
+
+.artworkSky {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.14) 0%,
-    rgba(255,255,255,0.04) 22%,
-    rgba(255,255,255,0.00) 46%,
-    rgba(0,0,0,0.08) 100%
-  );
-  opacity: 0.9;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 34%);
+  mix-blend-mode: screen;
 }
 
-.col {
-  flex: 1;
-  height: 100%;
-  position: relative;
+.artworkGlow {
+  position: absolute;
+  inset: auto auto -8% -6%;
+  width: 46%;
+  height: 42%;
+  border-radius: 999px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 68%);
+  filter: blur(28px);
+  opacity: 0.65;
+}
+
+.artworkGrain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 6px 6px, 6px 6px;
+}
+
+.logoBlock {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: min(44%, 420px);
+  text-align: right;
   z-index: 2;
-  transform-style: preserve-3d;
 }
 
-.col:nth-child(1) {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0.5rem;
-  transform: translateZ(24px);
-}
-
-.col:nth-child(2) {
-  border-radius: 0.75rem;
-  overflow: hidden;
-  transform: translateZ(18px);
-}
-
-.col img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.card h1 {
+.eyebrow {
+  margin: 0 0 0.75rem 0;
+  font-family: var(--font-sgco);
+  font-size: 0.82rem;
   text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.logoBlock h2 {
+  margin: 0;
+  font-family: var(--font-sgco);
+  font-size: clamp(2.8rem, 5.3vw, 5.3rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: #f6e8a9;
+  text-shadow:
+    -2px 0 #0e6e8f,
+    2px 0 #0e6e8f,
+    0 -2px #0e6e8f,
+    0 2px #0e6e8f,
+    0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.indexBadge {
+  position: absolute;
+  top: 1.75rem;
+  left: 1.75rem;
+  z-index: 2;
   font-family: var(--font-sgco);
   font-size: 3rem;
   font-weight: 800;
   line-height: 1;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.94);
 }
 
-.card p {
-  text-transform: uppercase;
-  font-family: var(--font-sgco);
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.86);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-.mediaGradient {
-  width: 100%;
-  height: 100%;
-  border-radius: 0.75rem;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.22), rgba(0,0,0,0.16)),
-    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
-  border: 1px solid rgba(255,255,255,0.16);
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.titleContainer {
+.content {
   position: absolute;
-  top: 4vh;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  z-index: 1;
-  pointer-events: none;
+  left: 1.75rem;
+  bottom: 1.75rem;
+  max-width: min(46%, 420px);
+  z-index: 2;
+  will-change: transform;
 }
 
-.title h1 {
+.subtitle {
+  margin: 0 0 1.2rem 0;
   font-family: var(--font-main);
-  font-size: 5rem;
-  color: #07080c;
-  font-weight: 800;
+  font-size: clamp(1rem, 1.25vw, 1.1rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-@media (max-width: 1000px) {
+.cta {
+  border: none;
+  outline: none;
+  appearance: none;
+  padding: 0.88rem 1.35rem;
+  border-radius: 999px;
+  background: #efe3ab;
+  color: #1b1b1b;
+  font-family: var(--font-main);
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+@media (max-width: 1200px) {
+  .card {
+    width: min(84vw, 1080px);
+  }
+
+  .logoBlock {
+    width: min(48%, 380px);
+  }
+
+  .logoBlock h2 {
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+  }
+}
+
+@media (max-width: 900px) {
   .projectsTrack {
-    min-height: 480vh;
+    min-height: 450vh;
   }
 
   .card {
-    width: calc(100% - 4rem);
-    height: 75%;
+    top: 52.5%;
+    width: calc(100% - 1.5rem);
+    height: min(74vh, 760px);
   }
 
-  .cardInner {
-    flex-direction: column;
+  .logoBlock {
+    top: 1.4rem;
+    right: 1.4rem;
+    width: 56%;
   }
 
-  .col {
-    width: 100%;
+  .indexBadge {
+    top: 1.2rem;
+    left: 1.2rem;
+    font-size: 2.4rem;
+  }
+
+  .content {
+    left: 1.2rem;
+    bottom: 1.2rem;
+    max-width: 60%;
+  }
+}
+
+@media (max-width: 640px) {
+  .projectsTrack {
+    min-height: 420vh;
+  }
+
+  .card {
+    top: 51.5%;
+    width: calc(100% - 1rem);
+    height: 72vh;
+  }
+
+  .frame {
+    padding: 10px 10px 14px 10px;
+  }
+
+  .logoBlock {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    text-align: left;
+  }
+
+  .logoBlock h2 {
+    font-size: clamp(2.2rem, 10vw, 3.6rem);
+    max-width: 8ch;
+  }
+
+  .indexBadge {
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+    left: auto;
+    font-size: 1.8rem;
+  }
+
+  .content {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+    padding-right: 3.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .cta {
+    padding: 0.82rem 1.2rem;
+    font-size: 0.95rem;
   }
 }

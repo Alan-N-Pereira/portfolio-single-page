@@ -1,0 +1,53 @@
+.transitionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000000;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.transitionSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.3);
+}
+
+.titleWrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--font-main);
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 768px) {
+  .transitionSvg {
+    transform: scale(1.45);
+  }
+
+  .title {
+    font-size: clamp(2.4rem, 12vw, 4.5rem);
+  }
+}

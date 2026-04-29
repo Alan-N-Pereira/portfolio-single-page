@@ -132,7 +132,7 @@
   color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
   font-family: var(--font-sgco);
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -154,8 +154,9 @@
 
 .contactName {
   color: #fff;
-  font-family: var(--font-main);
-  font-size: 1.35rem;
+  font-family: var(--font-sgco);
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
   font-weight: 700;
   margin: 0;
 }
@@ -163,7 +164,7 @@
 .contactMeta {
   color: rgba(255, 255, 255, 0.72);
   font-family: var(--font-sgco);
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   margin: 0;
   letter-spacing: 0.03em;
 }
