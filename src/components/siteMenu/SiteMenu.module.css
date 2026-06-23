@@ -3,6 +3,9 @@
   inset: 0;
   z-index: 5000;
   pointer-events: none;
+
+  overflow: hidden;
+  contain: paint;
 }
 
 .menuHidden {
@@ -183,5 +186,68 @@
 
   .navItem {
     font-size: clamp(2.2rem, 12vw, 3.6rem);
+  }
+}
+
+@media (min-width: 1900px) {
+  .menuButton {
+    top: 44px;
+    right: 44px;
+    width: 105px;
+    height: 105px;
+  }
+
+  .menuLine {
+    width: 54px;
+    height: 8px;
+  }
+
+  .menuLine:first-child {
+    transform: translateY(-10px);
+  }
+
+  .menuLine:last-child {
+    transform: translateY(10px);
+  }
+
+  .panel {
+    width: min(820px, 100vw);
+  }
+
+  .panelInner {
+    padding: 190px 64px 60px;
+  }
+
+  .nav {
+    gap: 18px;
+  }
+
+  .navItem {
+    font-size: clamp(5rem, 5vw, 8rem);
+  }
+
+  .panelBottom {
+    gap: 44px;
+  }
+
+  .socials {
+    gap: 24px 38px;
+  }
+
+  .socialLink {
+    font-size: 2.2rem;
+  }
+
+  .contactBlock {
+    gap: 10px;
+    padding-top: 28px;
+  }
+
+  .contactName {
+    font-size: 2.2rem;
+  }
+
+  .contactMeta {
+    font-size: 1.8rem;
   }
 }

@@ -132,3 +132,37 @@
   background: rgba(7, 8, 12, 0.42);
   will-change: transform, opacity;
 }
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .introTitle {
+    font-size: clamp(2.65rem, 5.8vw, 3.1rem);
+    line-height: 1.15;
+    letter-spacing: 0.015em;
+  }
+
+  .mainTitle {
+    font-size: clamp(5.1rem, 11vw, 6rem);
+    line-height: 0.92;
+  }
+}
+
+@media (min-width: 1900px) {
+  .titleStage {
+    width: min(1500px, 88vw);
+    min-height: 290px;
+  }
+
+  .introTitle {
+    font-size: 6.5rem;
+  }
+
+  .mainTitle {
+    font-size: 11.5rem;
+  }
+
+  .line {
+    width: 700px;
+    height: 3px;
+    margin-top: 42px;
+  }
+}

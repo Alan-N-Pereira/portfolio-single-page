@@ -2,65 +2,87 @@
   width: 100%;
 }
 
-/* ------------------ INTRO SVG OVERLAY ------------------ */
+/* ======================================================
+   INTRO SVG OVERLAY
+====================================================== */
+
 .svgOverlay {
   position: fixed;
   inset: 0;
   z-index: 100;
+
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  overflow: hidden;
   background: #000;
 }
 
 .svgOverlay svg {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
-/* ------------------ PINNED WRAP ------------------ */
+/* ======================================================
+   PINNED WRAP
+====================================================== */
+
 .pinWrap {
   position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background: #000;
   z-index: 10;
   isolation: isolate;
+
+  width: 100%;
+  min-height: 100vh;
+
+  background: #000;
 }
 
-/* ------------------ HERO ------------------ */
+/* ======================================================
+   HERO
+====================================================== */
+
 .main {
   width: 100%;
+
   font-family: var(--font-main);
+
   will-change: transform;
 }
 
 .landing {
   position: relative;
+
   width: 100%;
   height: 100vh;
-  background: #000;
+
   overflow: hidden;
+  background: #000;
 }
 
-/* Navbar */
+/* ======================================================
+   NAVIGATION
+====================================================== */
+
 .navbar {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 10;
+
   width: 100%;
-  padding: 40px 40px;
+  padding: 40px;
 }
 
 .logo {
   display: flex;
-  gap: 15px;
   align-items: flex-start;
+  gap: 15px;
 }
 
 .lines {
@@ -69,38 +91,47 @@
   gap: 5px;
 }
 
-.line15 {
-  width: 50px;
+.line15,
+.line8,
+.line5 {
   height: 8px;
   background: #fff;
+}
+
+.line15 {
+  width: 50px;
 }
 
 .line8 {
   width: 32px;
-  height: 8px;
-  background: #fff;
 }
 
 .line5 {
   width: 20px;
-  height: 8px;
-  background: #fff;
 }
 
 .logoText {
   margin-top: -8px;
-  line-height: 1;
-  font-size: 40px;
+
   color: #fff;
+
+  font-size: 40px;
   font-weight: 400;
+  line-height: 1;
+
   text-shadow: -2px 2px 4px rgba(0, 0, 0, 0.51);
 }
 
-/* Images */
+/* ======================================================
+   HERO IMAGES
+====================================================== */
+
 .imagesDiv {
   position: relative;
+
   width: 100%;
   height: 100vh;
+
   overflow: hidden;
 }
 
@@ -108,9 +139,13 @@
 .bg {
   position: absolute;
   inset: 0;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
+  object-position: center center;
+
   will-change: transform;
 }
 
@@ -124,17 +159,23 @@
   transform-origin: 50% 50%;
 }
 
-/* Center Text */
+/* ======================================================
+   HERO TITLE
+====================================================== */
+
 .text {
   position: absolute;
   top: 10%;
   left: 50%;
-  transform: translateX(-50%);
+
   display: flex;
   flex-direction: column;
   gap: 5px;
+
   color: #fff;
   text-align: center;
+
+  transform: translateX(-50%);
   pointer-events: none;
   user-select: none;
   will-change: transform, opacity;
@@ -142,10 +183,12 @@
 
 .text h1 {
   font-size: 12rem;
-  line-height: 1;
   font-weight: 700;
+  line-height: 1;
   letter-spacing: -0.005em;
+
   white-space: nowrap;
+
   text-shadow: -2px 2px 4px rgba(0, 0, 0, 0.51);
 }
 
@@ -157,35 +200,51 @@
   margin-left: 200px;
 }
 
-/* Alan */
+/* ======================================================
+   ALAN CHARACTER
+====================================================== */
+
 .alan {
   position: absolute;
   left: 50%;
   bottom: -150%;
-  transform: scale(2) rotate(-20deg);
-  transform-origin: 50% 100%;
+
+  width: auto;
   height: 50%;
   max-width: none;
+
+  transform: scale(2) rotate(-20deg);
+  transform-origin: 50% 100%;
+
   will-change: transform, bottom;
 }
 
+/* ======================================================
+   HERO SPEECH BUBBLE
+====================================================== */
+
 .heroBubbleWrap {
   position: absolute;
-  left: 70%;
-  bottom: 72%;
   z-index: 15;
-  pointer-events: auto;
+
   transform: translateX(-50%);
+  pointer-events: auto;
 }
 
 .heroBubble {
   position: relative;
+
   width: 320px;
   min-height: 120px;
   padding: 16px 16px 18px;
+
   background: #fff;
   color: #000;
-  font-family: "Press Start 2P", var(--font-sgco), monospace;
+
+  font-family:
+    "Press Start 2P",
+    var(--font-sgco),
+    monospace;
   font-size: 1.5rem;
   font-weight: 800;
   line-height: 1.6;
@@ -209,12 +268,16 @@
 
 .heroBubble::after {
   content: "";
+
   position: absolute;
-  left: -8px;
   top: 52px;
+  left: -8px;
+
   width: 4px;
   height: 4px;
+
   background: #fff;
+
   box-shadow:
     -4px 0 #000,
     -8px 0 #000,
@@ -232,22 +295,31 @@
 
 .heroBubbleButton {
   margin-top: 14px;
+  padding: 12px 14px;
+
   border: none;
   background: #000;
   color: #fff;
-  font-family: "Press Start 2P", var(--font-sgco), monospace;
+
+  font-family:
+    "Press Start 2P",
+    var(--font-sgco),
+    monospace;
   font-size: 1rem;
   line-height: 1;
-  padding: 12px 14px;
-  cursor: pointer;
   text-transform: uppercase;
+
+  cursor: pointer;
 
   box-shadow:
     0 -2px #000,
     2px 0 #000,
     0 2px #000,
     -2px 0 #000;
-  transition: transform 0.18s ease, opacity 0.18s ease;
+
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .heroBubbleButton:hover {
@@ -258,6 +330,7 @@
 .heroBubbleCursor {
   display: inline-block;
   margin-left: 4px;
+
   animation: bubbleCursorBlink 0.9s steps(1) infinite;
 }
 
@@ -266,6 +339,7 @@
   50% {
     opacity: 1;
   }
+
   50.01%,
   100% {
     opacity: 0;
@@ -275,29 +349,48 @@
 @keyframes bubbleFloat {
   0%,
   100% {
-    transform: translateX(-50%) translateY(0px);
+    transform: translateX(-50%) translateY(0);
   }
+
   50% {
     transform: translateX(-50%) translateY(-6px);
   }
 }
 
-/* Bottom bar */
+/* ======================================================
+   HERO BOTTOM BAR
+====================================================== */
+
 .btmbar {
   position: absolute;
   left: 0;
   bottom: 0;
+
   width: 100%;
   padding: 54px 40px;
+
   color: #fff;
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 0)
+  );
 }
 
 .btmbarInner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: "Helvetica Now Display", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  font-family:
+    "Helvetica Now Display",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
 }
 
 .footerRight {
@@ -305,29 +398,34 @@
 }
 
 .footerTitle {
+  color: #fff;
+
   font-size: 20px;
   font-weight: 800;
   letter-spacing: 0.01em;
-  color: #fff;
 }
 
 .footerSub {
+  color: #fff;
+
+  font-size: 16px;
   font-style: italic;
   font-weight: 600;
-  font-size: 16px;
-  opacity: 0.9;
   letter-spacing: 0.02em;
-  color: #fff;
+
+  opacity: 0.9;
 }
 
 .btmbarScroll {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+
+  transform: translateX(-50%);
   animation: scrollBounce 1.2s ease-in-out infinite;
 }
 
@@ -339,6 +437,7 @@
 .scrollArrow {
   width: 20px;
   height: auto;
+
   opacity: 0.9;
 }
 
@@ -347,129 +446,201 @@
   100% {
     transform: translateX(-50%) translateY(0);
   }
+
   50% {
     transform: translateX(-50%) translateY(10px);
   }
 }
 
-/* ------------------ ABOUT FLOW WRAP (normal page section) ------------------ */
+/* ======================================================
+   ABOUT FLOW WRAP
+====================================================== */
+
 .aboutFlowWrap {
   position: relative;
-  min-height: 100vh; /* try 120–160vh */
+
+  min-height: 100vh;
+  padding: 6vh 6vw 12vh;
+
   background: #000;
-  padding:  6vh 6vw 12vh;
 }
 
-/* ------------------ ABOUT MASK OVERLAY ------------------ */
-/* Default: fixed (during the pin animation) */
+/* ======================================================
+   ABOUT MASK OVERLAY
+====================================================== */
+
 .aboutOverlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: auto;
+  bottom: auto;
   z-index: 999;
-  pointer-events: none;
+
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
   opacity: 0;
   isolation: isolate;
+  contain: paint;
+  pointer-events: none;
 }
 
-/* ✅ After pin ends: becomes part of the page (NOT sticky) */
 .aboutOverlayInFlow {
   position: relative;
   inset: auto;
-  z-index: 1;     /* IMPORTANT: drop it under other sections */
+  z-index: 1;
+
   opacity: 1;
   pointer-events: none;
 }
 
-/* When in flow, don't keep centering like fullscreen */
 .aboutOverlayInFlow .aboutOverlayMove {
   position: relative;
   inset: auto;
+
   display: grid;
-  place-items: start center;   /* stick to top */
-  padding-top: 6vh;            /* ✅ space from top */
+  place-items: start center;
+
+  padding-top: 6vh;
+
+  transform: none !important;
 }
 
-/* Make the title not fill the entire viewport anymore */
 .aboutOverlayInFlow .aboutSvg {
   width: min(900px, 92vw);
   height: auto;
 }
 
-/* ✅ Intro should NOT be absolute after settling (or it will float onto AboutSection) */
 .aboutOverlayInFlow .aboutIntro {
   position: relative;
   top: auto;
   left: auto;
-  transform: none;
 
   width: min(900px, 86vw);
   margin: 4vh auto 0;
 
-  text-align: center;
   align-items: center;
-}
+  text-align: center;
 
-.aboutOverlayInFlow .aboutOverlayMove {
-  transform: none !important;
+  transform: none;
 }
-
 
 .aboutOverlayMove {
   position: absolute;
   inset: 0;
+
   display: grid;
   place-items: center;
-  will-change: transform;
+
+  overflow: hidden;
+
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  will-change: transform;
 }
 
 .aboutSvg {
-  width: 100vw;
-  height: 100vh;
   display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .cutLayer,
 .solidLayer {
   position: absolute;
   inset: 0;
-  will-change: opacity;
+
+  overflow: hidden;
+
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  will-change: opacity;
 }
 
 .solidLayer {
   opacity: 0;
 }
 
-/* ✅ Intro text (below the settled title) */
+/* ======================================================
+   ABOUT INTRO
+====================================================== */
+
 .aboutIntro {
   position: absolute;
-  top: 40vh; /* intro sits under the title once settled */
+  top: 40vh;
   left: 50%;
-  transform: translateX(-50%);
-  width: min(900px, 86vw);
+  z-index: 2;
+
+  width: min(980px, 76vw);
+
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  gap: 16px;
 
   color: rgba(255, 255, 255, 0.88);
+
+  font-family:
+    "Gill Sans",
+    "Gill Sans MT",
+    Calibri,
+    "Trebuchet MS",
+    sans-serif;
   font-size: 2rem;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  line-height: 1.42;
+  text-align: center;
 
   opacity: 0;
+  transform: translateX(-50%);
   will-change: transform, opacity;
-  z-index: 2;
+}
+
+.aboutIntro p {
+  margin: 0;
+}
+
+.aboutIntro p:first-child {
+  width: 100%;
+  margin-bottom: 4px;
+
+  color: rgba(255, 255, 255, 0.94);
+
+  font-weight: 700;
+  text-align: center;
+}
+
+.aboutIntro p:nth-child(2),
+.aboutIntro p:nth-child(3) {
+  max-width: 920px;
+
+  color: rgba(255, 255, 255, 0.82);
+  text-align: center;
 }
 
 .aboutIntroTags {
-  margin-top: 10px;
-  opacity: 0.95;
+  width: min(880px, 100%);
+  margin-top: 22px;
+  padding-top: 20px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+  color: rgba(145, 223, 236, 0.88);
+
+  font-size: 1.55rem;
+  line-height: 1.35;
+  text-align: center;
 }
 
+/* ======================================================
+   ABOUT BODY
+====================================================== */
 
 .aboutBody {
+  z-index: 2;
+
   width: min(900px, 86vw);
   min-height: 60vh;
   margin: 0 auto;
@@ -477,22 +648,26 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 18px;
 
-  text-align: center;
-  align-items: center;
-
   color: rgba(255, 255, 255, 0.88);
+
+  font-family:
+    "Gill Sans",
+    "Gill Sans MT",
+    Calibri,
+    "Trebuchet MS",
+    sans-serif;
   font-size: 2rem;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   line-height: 1.7;
+  text-align: center;
 
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 
   transition: opacity 0.35s ease;
-  z-index: 2;
 }
 
 .aboutBodyVisible {
@@ -501,46 +676,513 @@
   pointer-events: auto;
 }
 
-.callToAction{
-  text-transform: capitalize;
+.callToAction {
   margin-top: 5vh;
+
   color: #91dfec;
+  text-transform: capitalize;
 }
 
 .aboutOverlayCollapsed {
   height: 0;
   min-height: 0;
+
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
 }
 
-@media (max-width: 900px) {
-  .heroBubbleWrap {
-    left: 58%;
-    bottom: 52%;
-  }
+/* ======================================================
+   SHARED TABLET / SMALL LAPTOP
+   769px — 1200px
+====================================================== */
 
+@media (min-width: 769px) and (max-width: 1200px) {
+  .heroBubbleWrap {
+    left: 68%;
+    bottom: 70%;
+  }
+}
+
+/* ======================================================
+   MOBILE SHARED
+   0px — 767px
+====================================================== */
+
+@media (max-width: 767px) {
   .heroBubble {
     width: 240px;
-    font-size: 0.58rem;
     padding: 12px;
+
+    font-size: 0.58rem;
   }
 
   .heroBubbleButton {
-    font-size: 0.52rem;
     padding: 10px 12px;
+
+    font-size: 0.52rem;
+  }
+}
+
+/* ======================================================
+   SMALL MOBILE FOOTER
+   0px — 600px
+====================================================== */
+
+@media (max-width: 600px) {
+  .btmbar {
+    padding: 38px 22px 30px;
   }
 
+  .btmbarInner {
+    align-items: flex-end;
+    gap: 14px;
+  }
+
+  .btmbarScroll {
+    display: none;
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 50%;
+  }
+
+  .footerRight {
+    text-align: right;
+  }
+
+  .footerTitle {
+    font-size: 14px;
+    line-height: 1.1;
+  }
+
+  .footerSub {
+    margin-top: 4px;
+
+    font-size: 11px;
+    line-height: 1.2;
+  }
+}
+
+/* ======================================================
+   MOBILE HERO
+   0px — 480px
+====================================================== */
+
+@media (max-width: 480px) {
+  .root {
+    overflow-x: clip;
+  }
+
+  .pinWrap {
+    min-height: 100dvh;
+  }
+
+  .landing,
+  .imagesDiv {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  /* ---------- NAVIGATION ---------- */
+
+  .navbar {
+    padding: 22px 18px;
+  }
+
+  .logoText {
+    margin-top: 0;
+
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  /* ---------- HERO TITLE ---------- */
+
+  .text {
+    top: 30%;
+    left: 50%;
+    z-index: 2;
+
+    width: 100%;
+    gap: 0;
+
+    transform: translateX(-50%);
+  }
+
+  .text h1 {
+    margin: 0;
+
+    font-size: clamp(4rem, 15.5vw, 4.15rem);
+    line-height: 0.82;
+    letter-spacing: -0.01em;
+  }
+
+  .text h1:first-child {
+    margin-left: -50vw;
+  }
+
+  .text h1:last-child {
+    margin-top: 1.45rem;
+    margin-left: 0vw;
+  }
+
+  .alan {
+    z-index: 4;
+  }
+
+  /* ---------- SPEECH BUBBLE ---------- */
+
+  .heroBubble {
+    width: min(220px, calc(100vw - 72px));
+    min-height: 92px;
+    padding: 13px 14px 15px;
+
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .heroBubbleButton {
+    margin-top: 11px;
+    padding: 9px 10px;
+
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.085em;
+  }
+
+  .heroBubbleWrap {
+    bottom: auto;
+    z-index: 15;
+  }
+
+  /* ---------- BOTTOM BAR ---------- */
+
+  .btmbar {
+    padding: 36px 18px 24px;
+
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.94) 34%,
+      rgba(0, 0, 0, 0.48) 68%,
+      rgba(0, 0, 0, 0) 100%
+    );
+
+    z-index: 8;
+  }
+
+  .btmbarInner {
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 47%;
+  }
+
+  .footerTitle {
+    font-size: 14px;
+    line-height: 1.12;
+  }
+
+  .footerSub {
+    margin-top: 4px;
+
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  /* ---------- MOBILE ABOUT INTRO ---------- */
+
+.aboutIntro {
+  /* More space below the About Me title */
+  top: 37vh;
+
+  width: min(370px, 88vw);
+  gap: 17px;
+
+  font-size: 1.22rem;
+  line-height: 1.55;
+}
+
+.aboutIntro p:first-child {
+  margin-bottom: 7px;
+
+  font-size: 1.48rem;
+  line-height: 1.3;
+}
+
+.aboutIntro p:nth-child(2),
+.aboutIntro p:nth-child(3) {
+  width: 100%;
+  max-width: 360px;
+}
+
+.aboutIntroTags {
+  width: min(350px, 100%);
+  margin-top: 17px;
+  padding-top: 16px;
+
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+/* ---------- MOBILE ABOUT BODY ---------- */
+
+.aboutFlowWrap {
+  padding: 0 5vw;
+}
+
+.aboutBody {
+  width: min(330px, 78vw);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 10vh 0 8vh;
+  box-sizing: border-box;
+
+  justify-content: flex-start;
+  gap: 24px;
+
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+.aboutBody p {
+  width: 100%;
+  margin: 0;
+}
+
+.callToAction {
+  margin-top: 4vh;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+}
+
+/* ======================================================
+   VERY SMALL MOBILE
+   0px — 360px
+====================================================== */
+
+@media (max-width: 360px) {
+  .btmbar {
+    padding-inline: 16px;
+  }
+
+  .footerTitle {
+    font-size: 12px;
+  }
+
+  .footerSub {
+    font-size: 10px;
+  }
+}
+
+/* ======================================================
+   TABLET
+   768px — 900px
+====================================================== */
+
+@media (min-width: 768px) and (max-width: 900px) {
+  /* ---------- NAVIGATION ---------- */
+
+  .navbar {
+    padding: 30px 24px 24px;
+  }
+
+  .logoText {
+    margin-top: 0;
+
+    font-size: 35px;
+    line-height: 1;
+  }
+
+  /* ---------- HERO TITLE ---------- */
+
+  .text {
+    top: 20%;
+    gap: 0;
+  }
+
+  .text h1 {
+    margin-top: 50px;
+
+    font-size: clamp(6rem, 14vw, 6.8rem);
+    line-height: 0.5;
+  }
+
+  .text h1:first-child {
+    margin-left: -40vw;
+  }
+
+  .text h1:last-child {
+    margin-left: 7vw;
+  }
+
+  /* ---------- SPEECH BUBBLE ---------- */
+
+  .heroBubble {
+    width: 270px;
+    min-height: 108px;
+    padding: 16px 17px 18px;
+
+    font-size: 1.08rem;
+    line-height: 1.55;
+  }
+
+  .heroBubbleButton {
+    margin-top: 12px;
+    padding: 11px 13px;
+
+    font-size: 0.8rem;
+  }
+
+  /* ---------- BOTTOM BAR ---------- */
+
+  .btmbar {
+    padding: 48px 22px 25px;
+
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.94) 28%,
+      rgba(0, 0, 0, 0.52) 62%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .btmbarInner {
+    align-items: flex-end;
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 32%;
+  }
+
+  .footerRight {
+    text-align: right;
+  }
+
+  .footerTitle {
+    font-size: 16px;
+    line-height: 1.12;
+  }
+
+  .scrollText {
+    font-size: 15px;
+    line-height: 1.12;
+  }
+
+  .footerSub {
+    margin-top: 4px;
+
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .scrollArrow {
+    width: 17px;
+  }
+
+  /* ---------- ABOUT INTRO ---------- */
+
+  .aboutIntro {
+    top: clamp(270px, 39vh, 325px);
+
+    width: min(690px, 90vw);
+    gap: 20px;
+
+    font-size: 1.72rem;
+    line-height: 1.5;
+  }
+
+  .aboutIntro p:first-child {
+    margin-bottom: 8px;
+
+    font-size: 2rem;
+    line-height: 1.25;
+  }
+
+  .aboutIntro p:nth-child(2),
+  .aboutIntro p:nth-child(3) {
+    width: 100%;
+    max-width: 660px;
+  }
+
+  .aboutIntroTags {
+    width: min(650px, 100%);
+    margin-top: 24px;
+    padding-top: 20px;
+
+    font-size: 1.18rem;
+    line-height: 1.45;
+  }
+
+  /* ---------- ABOUT STORY BODY ---------- */
+
+  .aboutBody {
+    width: min(680px, 88vw);
+    min-height: 82vh;
+    gap: 20px;
+
+    font-size: 1.55rem;
+    line-height: 1.68;
+
+    transform: translateY(-45px);
+  }
+
+  .aboutBody p {
+    margin: 0;
+  }
+
+  .callToAction {
+    margin-top: 28px;
+
+    font-size: 1.55rem;
+    line-height: 1.3;
+  }
+}
+
+/* ======================================================
+   TABLET BACKGROUND POSITION
+====================================================== */
+
+@media (width: 768px) {
+  .bg {
+    object-position: 52% center;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .bg {
+    object-position: 55% center;
+  }
+}
+
+/* ======================================================
+   BOTTOM-POINTING SPEECH BUBBLE TAIL
+   MOBILE + TABLET
+   0px — 900px
+====================================================== */
+
+@media (max-width: 900px) {
   .heroBubble::after {
     content: "";
+
     position: absolute;
-    left: calc(50% - 2px);
     top: auto;
     bottom: -8px;
+    left: calc(50% - 2px);
+
     width: 4px;
     height: 4px;
+
     background: #fff;
+
     box-shadow:
       0 4px #000,
       0 8px #000,
@@ -550,5 +1192,521 @@
       -4px 4px #fff,
       -8px 0 #fff,
       -4px 0 #fff;
+  }
+}
+
+/* ======================================================
+   LARGE TABLET / SMALL LAPTOP
+   901px — 1024px
+====================================================== */
+
+@media (min-width: 901px) and (max-width: 1024px) {
+  .navbar {
+    padding: 28px;
+  }
+
+  .logoText {
+    margin-top: -6px;
+
+    font-size: 34px;
+  }
+
+  .text {
+    top: 16%;
+  }
+
+  .text h1 {
+    font-size: 8rem;
+  }
+
+  .text h1:first-child {
+    margin-left: -340px;
+  }
+
+  .text h1:last-child {
+    margin-left: 125px;
+  }
+
+  .heroBubble {
+    width: 250px;
+    min-height: 96px;
+    padding: 14px 14px 16px;
+
+    font-size: 1.08rem;
+    line-height: 1.55;
+  }
+
+  .heroBubbleButton {
+    margin-top: 12px;
+    padding: 10px 12px;
+
+    font-size: 0.74rem;
+  }
+
+  .heroBubble::after {
+    top: 42px;
+  }
+
+  .bg {
+    object-position: 56% center;
+  }
+
+  .btmbar {
+    padding: 52px 28px 30px;
+
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.92) 30%,
+      rgba(0, 0, 0, 0.48) 63%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .footerTitle,
+  .scrollText {
+    font-size: 15px;
+  }
+
+  .footerSub {
+    font-size: 13px;
+  }
+
+  .scrollArrow {
+    width: 17px;
+  }
+
+  .aboutIntro {
+    width: min(900px, 88vw);
+    gap: 13px;
+
+    font-size: 1.5rem;
+    line-height: 1.42;
+  }
+
+  .aboutIntro p:nth-child(2),
+  .aboutIntro p:nth-child(3) {
+    max-width: 860px;
+  }
+
+  .aboutIntroTags {
+    width: min(820px, 100%);
+    margin-top: 18px;
+    padding-top: 17px;
+
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+
+  .aboutBody {
+    width: min(860px, 90vw);
+    min-height: 60vh;
+    gap: 16px;
+
+    font-size: 1.5rem;
+    line-height: 1.68;
+  }
+
+  .callToAction {
+    margin-top: 4.5vh;
+
+    font-size: 1.5rem;
+  }
+}
+
+/* ======================================================
+   MEDIUM LAPTOP
+   1025px — 1200px
+====================================================== */
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .navbar {
+    padding: 32px;
+  }
+
+  .logoText {
+    margin-top: -7px;
+
+    font-size: 36px;
+  }
+
+  .text {
+    top: 14%;
+  }
+
+  .text h1 {
+    font-size: clamp(8.4rem, 12.8vw, 9.6rem);
+  }
+
+  .text h1:first-child {
+    margin-left: -32vw;
+  }
+
+  .text h1:last-child {
+    margin-left: 12vw;
+  }
+
+  .heroBubble {
+    width: 280px;
+    min-height: 106px;
+    padding: 15px 15px 17px;
+
+    font-size: 1.16rem;
+    line-height: 1.58;
+  }
+
+  .heroBubbleButton {
+    margin-top: 13px;
+    padding: 11px 13px;
+
+    font-size: 0.8rem;
+  }
+
+  .heroBubble::after {
+    top: 46px;
+  }
+
+  .bg {
+    object-position: 52% center;
+  }
+
+  .sky {
+    object-position: 50% center;
+  }
+
+  .btmbar {
+    padding: 56px 32px 34px;
+
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.9) 30%,
+      rgba(0, 0, 0, 0.44) 65%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .footerTitle,
+  .scrollText {
+    font-size: 17px;
+  }
+
+  .footerSub {
+    font-size: 14px;
+  }
+
+  .scrollArrow {
+    width: 18px;
+  }
+
+  .aboutIntro {
+    width: min(900px, 82vw);
+    gap: 14px;
+
+    font-size: 1.66rem;
+    line-height: 1.42;
+  }
+
+  .aboutIntro p:nth-child(2),
+  .aboutIntro p:nth-child(3) {
+    max-width: 860px;
+  }
+
+  .aboutIntroTags {
+    width: min(820px, 100%);
+    margin-top: 18px;
+    padding-top: 18px;
+
+    font-size: 1.3rem;
+  }
+
+  .aboutBody {
+    width: min(860px, 84vw);
+    min-height: 60vh;
+    gap: 17px;
+
+    font-size: 1.7rem;
+    line-height: 1.68;
+  }
+
+  .callToAction {
+    margin-top: 4.8vh;
+
+    font-size: 1.7rem;
+  }
+}
+
+/* ======================================================
+   LARGE LAPTOP
+   1201px — 1440px
+====================================================== */
+
+@media (min-width: 1201px) and (max-width: 1440px) {
+  .bg,
+  .sky {
+    object-position: 50% center;
+  }
+
+  .aboutIntro {
+    width: min(920px, 72vw);
+    gap: 14px;
+
+    font-size: 1.85rem;
+    line-height: 1.42;
+  }
+
+  .aboutIntro p:nth-child(2),
+  .aboutIntro p:nth-child(3) {
+    max-width: 860px;
+  }
+
+  .aboutIntroTags {
+    width: min(820px, 100%);
+    margin-top: 18px;
+    padding-top: 18px;
+
+    font-size: 1.4rem;
+  }
+}
+
+/* ======================================================
+   ORIGINAL DESKTOP
+   1441px — 1899px
+
+   Uses the base desktop values declared above.
+====================================================== */
+
+/* ======================================================
+   LARGE DESKTOP / 2560px VERSION
+   1900px AND ABOVE
+====================================================== */
+
+@media (min-width: 1900px) {
+  .navbar {
+    padding: 64px;
+  }
+
+  .logoText {
+    margin-top: -12px;
+
+    font-size: 70px;
+  }
+
+  .text h1 {
+    font-size: 18rem;
+  }
+
+  .text h1:first-child {
+    margin-left: -830px;
+  }
+
+  .text h1:last-child {
+    margin-left: 330px;
+  }
+
+  .heroBubble {
+    width: 530px;
+    min-height: 195px;
+    padding: 26px 26px 30px;
+
+    font-size: 2.55rem;
+
+    box-shadow:
+      0 -6px #fff,
+      0 -13px #000,
+      6px 0 #fff,
+      6px -6px #000,
+      13px 0 #000,
+      0 6px #fff,
+      0 13px #000,
+      -6px 0 #fff,
+      -6px 6px #000,
+      -13px 0 #000,
+      -6px -6px #000,
+      6px 6px #000,
+      16px 22px 0 rgba(0, 0, 0, 0.18);
+  }
+
+  .heroBubble::after {
+    top: 84px;
+    left: -13px;
+
+    width: 6px;
+    height: 6px;
+
+    box-shadow:
+      -6px 0 #000,
+      -13px 0 #000,
+      -19px 0 #000,
+      -13px -6px #000,
+      -6px -13px #000,
+      -6px -6px #fff,
+      0 -13px #fff,
+      0 -6px #fff;
+  }
+
+  .heroBubbleButton {
+    margin-top: 22px;
+    padding: 20px 24px;
+
+    font-size: 1.65rem;
+  }
+
+  .btmbar {
+    padding: 86px 64px;
+  }
+
+  .footerTitle,
+  .scrollText {
+    font-size: 34px;
+  }
+
+  .footerSub {
+    font-size: 27px;
+  }
+
+  .scrollArrow {
+    width: 34px;
+  }
+
+  .aboutIntro {
+    width: min(1650px, 78vw);
+    gap: 28px;
+
+    align-items: center;
+
+    font-size: 3.75rem;
+    line-height: 1.42;
+    text-align: center;
+  }
+
+  .aboutIntro p {
+    margin: 0;
+  }
+
+  .aboutIntro p:first-child {
+    width: 100%;
+    margin-bottom: 8px;
+
+    color: rgba(255, 255, 255, 0.94);
+
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .aboutIntro p:nth-child(2),
+  .aboutIntro p:nth-child(3) {
+    max-width: 1600px;
+
+    color: rgba(255, 255, 255, 0.82);
+    text-align: center;
+  }
+
+  .aboutIntroTags {
+    width: min(1500px, 100%);
+    margin-top: 34px;
+    padding-top: 32px;
+
+    border-top: 2px solid rgba(255, 255, 255, 0.14);
+
+    color: rgba(145, 223, 236, 0.88);
+
+    font-size: 3rem;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .aboutBody {
+    width: min(1500px, 72vw);
+    min-height: 62vh;
+    gap: 42px;
+
+    font-size: 3.35rem;
+    line-height: 1.68;
+  }
+
+  .callToAction {
+    margin-top: 7vh;
+
+    font-size: 3.35rem;
+  }
+}
+
+@media (max-width: 380px) {
+  /* ---------- NAV ---------- */
+
+  .navbar {
+    padding: 22px 16px;
+  }
+
+  .logoText {
+    font-size: 28px;
+  }
+
+  /* ---------- HERO TITLE ---------- */
+
+  .text {
+    top: 30.5%;
+  }
+
+  .text h1 {
+    font-size: clamp(3.75rem, 16vw, 3.95rem);
+    line-height: 0.82;
+  }
+
+  .text h1:first-child {
+    margin-left: -47vw;
+  }
+
+  .text h1:last-child {
+    margin-top: 1.35rem;
+    margin-left: 0;
+  }
+
+  /* ---------- SPEECH BUBBLE ---------- */
+
+  .heroBubble {
+    width: min(210px, calc(100vw - 76px));
+    min-height: 86px;
+    padding: 12px 13px 14px;
+
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .heroBubbleButton {
+    margin-top: 10px;
+    padding: 8px 9px;
+
+    font-size: 0.68rem;
+  }
+
+  /* ---------- BOTTOM BAR ---------- */
+
+  .btmbar {
+    padding: 34px 16px 23px;
+  }
+
+  .btmbarInner {
+    gap: 10px;
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 48%;
+  }
+
+  .footerTitle {
+    font-size: 13px;
+    line-height: 1.1;
+  }
+
+  .footerSub {
+    font-size: 10px;
+    line-height: 1.18;
+  }
+
+  .aboutOverlayInFlow .aboutSvg {
+    width: min(460px, 110vw);
   }
 }

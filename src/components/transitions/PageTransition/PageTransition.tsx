@@ -17,28 +17,24 @@ type PageTransitionProps = {
   title: string;
   children: ReactNode;
   className?: string;
-  triggerOffset?: string;
-  boundaryTriggerOffset?: string;
 };
 
 export default function PageTransition({
   title,
   children,
   className = "",
-  triggerOffset = "42vh",
-  boundaryTriggerOffset = "12vh",
 }: PageTransitionProps) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const enterTriggerRef = useRef<HTMLDivElement | null>(null);
-  const boundaryTriggerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const transitionsLockedRef = useRef(false);
-  const hasEnteredRef = useRef(false);
-  const isVisibleRef = useRef(false);
+
+  type TransitionPhase = "projects" | "forward" | "contact" | "reverse";
+
+  const phaseRef = useRef<TransitionPhase>("projects");
 
   useEffect(() => {
     const onLockChange = (event: Event) => {
@@ -61,8 +57,6 @@ export default function PageTransition({
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    const enterTrigger = enterTriggerRef.current;
-    const boundaryTrigger = boundaryTriggerRef.current;
     const overlay = overlayRef.current;
     const path = pathRef.current;
     const heading = titleRef.current;
@@ -70,8 +64,6 @@ export default function PageTransition({
 
     if (
       !section ||
-      !enterTrigger ||
-      !boundaryTrigger ||
       !overlay ||
       !path ||
       !heading ||
@@ -113,6 +105,51 @@ export default function PageTransition({
         });
       };
 
+      const getSectionTop = () => {
+        return Math.round(
+          window.scrollY + section.getBoundingClientRect().top
+        );
+      };
+
+      const jumpToContact = () => {
+        const contactTop = getSectionTop();
+
+        /*
+          Place the page slightly inside Contact.
+
+          This means scrolling upward by only a few pixels
+          crosses the reverse trigger.
+        */
+        window.scrollTo({
+          top: contactTop + 4,
+          left: 0,
+          behavior: "auto",
+        });
+
+        ScrollTrigger.update();
+      };
+
+      const jumpToProjectsEnd = () => {
+        const contactTop = getSectionTop();
+
+        /*
+          Stop slightly before the Contact boundary.
+
+          Do not use exactly:
+          contactTop - window.innerHeight
+
+          Landing exactly on the boundary can immediately
+          trigger the forward animation again.
+        */
+        window.scrollTo({
+          top: Math.max(0, contactTop - window.innerHeight - 12),
+          left: 0,
+          behavior: "auto",
+        });
+
+        ScrollTrigger.update();
+      };
+
       const forwardTl = gsap.timeline({
         paused: true,
         defaults: { ease: "power2.inOut" },
@@ -138,6 +175,11 @@ export default function PageTransition({
           },
           0.42
         )
+
+        // The blue transition is covering the screen here,
+        // so move from Projects to Contact behind it.
+        .add(jumpToContact, 0.96)
+
         .to(
           heading,
           {
@@ -179,120 +221,151 @@ export default function PageTransition({
           strokeWidth: 2,
         });
 
+        forwardTl.eventCallback("onComplete", () => {
+          phaseRef.current = "contact";
+        });
+
       const reverseTl = gsap.timeline({
         paused: true,
         defaults: { ease: "power2.inOut" },
       });
 
       reverseTl
-        .set(overlay, { autoAlpha: 1 })
-        .set(heading, { autoAlpha: 0, y: 0 })
-        .set(path, {
-          drawSVG: "100% 100%",
-          strokeWidth: 2,
-        })
-        .to(
-          content,
-          {
-            autoAlpha: 0,
-            y: 28,
-            duration: 0.26,
-            ease: "power2.out",
-          },
-          0
-        )
-        .to(
-          path,
-          {
-            drawSVG: "0% 100%",
-            strokeWidth: 300,
-            duration: 0.9,
-          },
-          0.02
-        )
-        .to(
-          overlay,
-          {
-            autoAlpha: 0,
-            duration: 0.32,
-          },
-          0.82
-        )
-        .set(path, {
-          drawSVG: "0%",
-          strokeWidth: 2,
-        });
+      .set(overlay, { autoAlpha: 1 })
+      .set(heading, { autoAlpha: 0, y: 0 })
+      .set(path, {
+        drawSVG: "100% 100%",
+        strokeWidth: 2,
+      })
+      .to(
+        content,
+        {
+          autoAlpha: 0,
+          y: 28,
+          duration: 0.26,
+          ease: "power2.out",
+        },
+        0
+      )
+      .to(
+        path,
+        {
+          drawSVG: "0% 100%",
+          strokeWidth: 300,
+          duration: 0.9,
+        },
+        0.02
+      )
+
+      // Move back to the final project while the screen is covered.
+      .add(jumpToProjectsEnd, 0.72)
+
+      .to(
+        overlay,
+        {
+          autoAlpha: 0,
+          duration: 0.32,
+        },
+        0.82
+      )
+      .set(path, {
+        drawSVG: "0%",
+        strokeWidth: 2,
+      });
+
+      reverseTl.eventCallback("onComplete", () => {
+        phaseRef.current = "projects";
+      });
 
       const playForward = () => {
+        if (phaseRef.current !== "projects") return;
+
         if (transitionsLockedRef.current) {
-          hasEnteredRef.current = true;
-          isVisibleRef.current = true;
+          phaseRef.current = "contact";
+
+          jumpToContact();
           setEndState();
           return;
         }
 
+        phaseRef.current = "forward";
+
         heading.textContent = title;
+
         reverseTl.pause(0);
         forwardTl.restart();
-
-        hasEnteredRef.current = true;
-        isVisibleRef.current = true;
       };
 
       const playReverse = () => {
+        if (phaseRef.current !== "contact") return;
+
         if (transitionsLockedRef.current) {
-          isVisibleRef.current = false;
+          phaseRef.current = "projects";
+
+          jumpToProjectsEnd();
           setStartState();
           return;
         }
 
+        phaseRef.current = "reverse";
+
         forwardTl.pause(0);
         reverseTl.restart();
-
-        isVisibleRef.current = false;
       };
 
       const sectionRect = section.getBoundingClientRect();
-      const sectionVisibleOnLoad =
-        sectionRect.top < window.innerHeight && sectionRect.bottom > 0;
 
-      if (sectionVisibleOnLoad) {
-        hasEnteredRef.current = true;
-        isVisibleRef.current = true;
+      const contactHasStarted = sectionRect.top <= 4 && sectionRect.bottom > 0;
+
+      if (contactHasStarted) {
+        phaseRef.current = "contact";
         setEndState();
       } else {
-        hasEnteredRef.current = false;
-        isVisibleRef.current = false;
+        phaseRef.current = "projects";
         setStartState();
       }
 
       const enterST = ScrollTrigger.create({
-        trigger: enterTrigger,
-        start: "top bottom",
+        trigger: section,
+
+        /*
+          Wait until Contact has moved a few pixels
+          inside the viewport.
+        */
+        start: "top bottom-=4",
+
+        invalidateOnRefresh: true,
+
         onEnter: () => {
-          if (hasEnteredRef.current) return;
+          if (phaseRef.current !== "projects") return;
+
           playForward();
         },
       });
 
-      const boundaryST = ScrollTrigger.create({
-        trigger: boundaryTrigger,
+      const reverseST = ScrollTrigger.create({
+        trigger: section,
+
+        /*
+          After the forward transition, the page sits at
+          contactTop + 4.
+
+          Scrolling upward slightly crosses this point.
+        */
         start: "top top",
+
+        invalidateOnRefresh: true,
+
         onLeaveBack: () => {
-          if (!hasEnteredRef.current) return;
-          if (!isVisibleRef.current) return;
+          if (phaseRef.current !== "contact") return;
+
           playReverse();
-        },
-        onEnter: () => {
-          if (!hasEnteredRef.current) return;
-          if (isVisibleRef.current) return;
-          playForward();
         },
       });
 
       return () => {
         enterST.kill();
-        boundaryST.kill();
+        reverseST.kill();
         forwardTl.kill();
         reverseTl.kill();
       };
@@ -303,26 +376,13 @@ export default function PageTransition({
     return () => {
       ctx.revert();
     };
-  }, [title, triggerOffset, boundaryTriggerOffset]);
+  }, [title]);
 
   return (
     <div
       ref={sectionRef}
       className={`${styles.transitionSection} ${className}`.trim()}
     >
-      <div
-        ref={enterTriggerRef}
-        className={styles.trigger}
-        style={{ top: triggerOffset }}
-        aria-hidden="true"
-      />
-
-      <div
-        ref={boundaryTriggerRef}
-        className={styles.trigger}
-        style={{ top: boundaryTriggerOffset }}
-        aria-hidden="true"
-      />
 
       <div ref={overlayRef} className={styles.transitionOverlay}>
         <svg

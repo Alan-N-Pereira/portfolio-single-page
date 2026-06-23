@@ -306,7 +306,7 @@
 
   .card {
     top: 51.5%;
-    width: calc(100% - 1rem);
+    width: calc(100% - 10rem);
     height: 72vh;
   }
 
@@ -351,5 +351,228 @@
   .cta {
     padding: 0.82rem 1.2rem;
     font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .card {
+    top: 53%;
+
+    width: min(84vw, 650px);
+    height: min(60vh, 510px);
+  }
+}
+
+@media (min-width: 1900px) {
+  .card {
+    top: 54%;
+    width: 78vw;
+    height: 68vh;
+  }
+
+  .frame {
+  padding: 30px 30px 36px;
+}
+
+.logoBlock {
+  top: 3.4rem;
+  right: 3.4rem;
+  width: min(44%, 710px);
+}
+
+.eyebrow {
+  margin-bottom: 1.2rem;
+  font-size: 1.35rem;
+}
+
+.logoBlock h2 {
+  font-size: 9rem;
+}
+
+.indexBadge {
+  top: 3rem;
+  left: 3rem;
+  font-size: 5rem;
+}
+
+.content {
+  left: 3rem;
+  bottom: 3rem;
+  max-width: min(46%, 710px);
+}
+
+.subtitle {
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  line-height: 1.5;
+}
+
+.cta {
+  padding: 1.45rem 2.25rem;
+  font-size: 1.6rem;
+}
+}
+
+/* ======================================================
+   MOBILE PROJECT CARDS
+   0px — 480px
+====================================================== */
+
+@media (max-width: 480px) {
+  .projectsTrack {
+    min-height: 420vh;
+  }
+
+  .stickyCards {
+    height: 100svh;
+  }
+
+  .cardsWrap {
+    transform: rotate(-0.7deg);
+  }
+
+  .card {
+    top: 51%;
+
+    width: min(88vw, 370px);
+    height: min(50svh, 510px);
+  }
+
+  .frame {
+    padding: 10px 10px 14px;
+    border-radius: 8px;
+  }
+
+  .artwork {
+    border-radius: 2px;
+  }
+
+  /* Project title */
+  .logoBlock {
+    top: 1.1rem;
+    left: 1.1rem;
+    right: 1.1rem;
+
+    width: auto;
+    text-align: left;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.45rem;
+
+    font-size: 0.6rem;
+    line-height: 1.3;
+    letter-spacing: 0.13em;
+  }
+
+  .logoBlock h2 {
+    max-width: 8ch;
+
+    font-size: clamp(2.3rem, 11vw, 3.2rem);
+    line-height: 0.9;
+  }
+
+  /* Bottom project description */
+  .content {
+    left: 1.1rem;
+    right: 4.4rem;
+    bottom: 1.1rem;
+
+    max-width: none;
+    padding-right: 0;
+  }
+
+  .subtitle {
+    max-width: 22ch;
+    margin-bottom: 0.9rem;
+
+    font-size: 0.85rem;
+    line-height: 1.5;
+    letter-spacing: 0.015em;
+  }
+
+  .cta {
+    padding: 0.78rem 1.1rem;
+
+    font-size: 0.82rem;
+    line-height: 1;
+  }
+
+  /* Card number */
+  .indexBadge {
+    top: auto;
+    right: 1.1rem;
+    bottom: 1.15rem;
+    left: auto;
+
+    font-size: 1.8rem;
+  }
+}
+
+/* ======================================================
+   375px PROJECT CARDS TWEAK
+====================================================== */
+
+@media (max-width: 380px) {
+  .projectsTrack {
+    min-height: 410vh;
+  }
+
+  .card {
+    top: 50%;
+
+    width: min(86vw, 330px);
+    height: min(46svh, 375px);
+  }
+
+  .frame {
+    padding: 9px 9px 13px;
+  }
+
+  .logoBlock {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.4rem;
+
+    font-size: 0.56rem;
+    line-height: 1.25;
+  }
+
+  .logoBlock h2 {
+    max-width: 8ch;
+
+    font-size: clamp(2.15rem, 10.5vw, 2.75rem);
+    line-height: 0.9;
+  }
+
+  .content {
+    left: 1rem;
+    right: 4rem;
+    bottom: 1rem;
+  }
+
+  .subtitle {
+    max-width: 21ch;
+    margin-bottom: 0.75rem;
+
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .cta {
+    padding: 0.68rem 0.95rem;
+
+    font-size: 0.74rem;
+  }
+
+  .indexBadge {
+    right: 1rem;
+    bottom: 1.05rem;
+
+    font-size: 1.6rem;
   }
 }
