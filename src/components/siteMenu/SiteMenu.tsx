@@ -220,7 +220,6 @@ export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
 
             <div ref={contactRef} className={styles.contactBlock}>
               <p className={styles.contactName}>Alan Pereira</p>
-              <p className={styles.contactMeta}>Phone number here</p>
               <p className={styles.contactMeta}>email@example.com</p>
             </div>
           </div>

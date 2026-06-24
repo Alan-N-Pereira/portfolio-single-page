@@ -17,36 +17,49 @@
   transition: opacity 0.35s ease;
 }
 
+/* ======================================================
+   MENU BUTTON
+====================================================== */
+
 .menuButton {
   position: fixed;
   top: 28px;
   right: 28px;
+  z-index: 5003;
+
   width: 68px;
   height: 68px;
+  padding: 0;
+
   border: none;
   background: transparent;
-  padding: 0;
+
   cursor: pointer;
   pointer-events: auto;
-  z-index: 5003;
 }
 
 .menuButtonInner {
   position: relative;
+
   width: 100%;
   height: 100%;
+
   display: grid;
   place-items: center;
 }
 
 .menuLine {
   position: absolute;
+
   width: 34px;
   height: 5px;
-  background: #fff;
+
   border-radius: 999px;
+  background: #fff;
+
   transform-origin: 50% 50%;
   will-change: transform;
+
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
 }
 
@@ -58,37 +71,62 @@
   transform: translateY(6px);
 }
 
+/* ======================================================
+   BACKDROP
+====================================================== */
+
 .backdrop {
   position: fixed;
   inset: 0;
+
   background: rgba(0, 0, 0, 0.38);
+
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+
   pointer-events: auto;
 }
+
+/* ======================================================
+   PANEL
+====================================================== */
 
 .panel {
   position: fixed;
   top: 0;
   right: 0;
+
   width: min(520px, 100vw);
   height: 100vh;
+  height: 100dvh;
+
   background:
     linear-gradient(180deg, rgba(10, 10, 12, 0.98), rgba(5, 5, 7, 1)),
     #050507;
+
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: -20px 0 60px rgba(0, 0, 0, 0.35);
+
   pointer-events: auto;
   overflow: hidden;
 }
 
 .panelInner {
+  box-sizing: border-box;
+
   height: 100%;
+  min-height: 0;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   padding: 120px 38px 36px;
 }
+
+/* ======================================================
+   NAVIGATION
+====================================================== */
 
 .nav {
   display: flex;
@@ -97,27 +135,36 @@
 }
 
 .navItem {
+  padding: 0;
+
   border: none;
   background: transparent;
   color: #fff;
-  text-align: left;
-  padding: 0;
-  cursor: pointer;
 
   font-family: var(--font-main);
   font-size: clamp(2.75rem, 6vw, 5rem);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -0.03em;
+  text-align: left;
   text-transform: uppercase;
 
-  transition: transform 0.25s ease, opacity 0.25s ease, color 0.25s ease;
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.25s ease;
 }
 
 .navItem:hover {
-  transform: translateX(12px);
   color: #91dfec;
+  transform: translateX(12px);
 }
+
+/* ======================================================
+   BOTTOM CONTENT
+====================================================== */
 
 .panelBottom {
   display: flex;
@@ -133,13 +180,18 @@
 
 .socialLink {
   color: rgba(255, 255, 255, 0.88);
-  text-decoration: none;
+
   font-family: var(--font-sgco);
   font-size: 1.5rem;
   font-weight: 700;
+  line-height: 1.2;
   letter-spacing: 0.08em;
+  text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.25s ease, transform 0.25s ease;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .socialLink:hover {
@@ -151,48 +203,169 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+
   padding-top: 18px;
+
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .contactName {
+  margin: 0;
+
   color: #fff;
+
   font-family: var(--font-sgco);
   font-size: 1.5rem;
-  letter-spacing: 0.06em;
   font-weight: 700;
-  margin: 0;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
 }
 
 .contactMeta {
+  margin: 0;
+
   color: rgba(255, 255, 255, 0.72);
+
   font-family: var(--font-sgco);
   font-size: 1.2rem;
-  margin: 0;
+  line-height: 1.3;
   letter-spacing: 0.03em;
+
+  overflow-wrap: anywhere;
 }
+
+/* ======================================================
+   MOBILE
+   0px — 640px
+====================================================== */
 
 @media (max-width: 640px) {
   .menuButton {
     top: 18px;
     right: 18px;
+
     width: 58px;
     height: 58px;
   }
 
-  .panelInner {
-    padding: 96px 24px 28px;
+  .menuLine {
+    width: 34px;
+    height: 5px;
   }
 
-  .navItem {
-    font-size: clamp(2.2rem, 12vw, 3.6rem);
+  .panel {
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  .panelInner {
+    padding:
+      84px
+      24px
+      max(28px, env(safe-area-inset-bottom));
+
+    gap: 20px;
+  }
+
+  .nav {
+  margin-top: 34px;
+  gap: 14px;
+}
+
+.navItem {
+  font-size: clamp(2.55rem, 12.4vw, 3.65rem);
+  line-height: 0.92;
+}
+
+  .panelBottom {
+    gap: 24px;
+  }
+
+  .socials {
+    gap: 14px 24px;
+  }
+
+  .socialLink {
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+
+  .contactBlock {
+    gap: 8px;
+    padding-top: 18px;
+  }
+
+  .contactName {
+    font-size: 1.32rem;
+    line-height: 1.2;
+  }
+
+  .contactMeta {
+    font-size: 1.02rem;
+    line-height: 1.3;
+    letter-spacing: 0.035em;
   }
 }
+
+/* ======================================================
+   SHORT REAL PHONES
+   Keeps menu non-scrollable and prevents cropping
+====================================================== */
+
+@media (max-width: 640px) and (max-height: 760px) {
+  .panelInner {
+    padding-top: 76px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+
+    gap: 16px;
+  }
+
+  .nav {
+  margin-top: 22px;
+  gap: 10px;
+}
+
+.navItem {
+  font-size: clamp(2.25rem, 11.5vw, 3.15rem);
+  line-height: 0.9;
+}
+
+  .panelBottom {
+    gap: 18px;
+  }
+
+  .socials {
+    gap: 12px 22px;
+  }
+
+  .socialLink {
+    font-size: 1.16rem;
+  }
+
+  .contactBlock {
+    gap: 6px;
+    padding-top: 14px;
+  }
+
+  .contactName {
+    font-size: 1.18rem;
+  }
+
+  .contactMeta {
+    font-size: 0.94rem;
+  }
+}
+
+/* ======================================================
+   LARGE DESKTOP / 2560px VERSION
+   1900px AND ABOVE
+====================================================== */
 
 @media (min-width: 1900px) {
   .menuButton {
     top: 44px;
     right: 44px;
+
     width: 105px;
     height: 105px;
   }
