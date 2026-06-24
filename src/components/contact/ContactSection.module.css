@@ -302,29 +302,76 @@
 
 @media (max-width: 360px) {
   .contactSection {
-    padding-inline: 0.85rem;
+    padding:
+      clamp(3.35rem, 8vh, 4.05rem)
+      0.75rem
+      clamp(2.2rem, 4.6vh, 2.65rem);
+  }
+
+  .inner {
+    width: min(100%, 312px);
+  }
+
+  .kicker {
+    margin-top: 2.1rem;
+    margin-bottom: 0.95rem;
+
+    font-size: 0.62rem;
+    line-height: 1.28;
+    letter-spacing: 0.14em;
   }
 
   .title {
-    font-size: clamp(3.65rem, 18vw, 4.1rem);
+    font-size: clamp(5.15rem, 26vw, 5.45rem);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
   }
 
   .description {
     width: min(100%, 305px);
-    font-size: 1rem;
+    margin-top: 1.38rem;
+
+    font-size: 0.9rem;
+    line-height: 1.6;
   }
 
   .actions {
     width: 100%;
+    margin-top: 1.7rem;
     gap: 0.6rem;
   }
 
   .primaryBtn,
   .secondaryBtn {
     min-height: 48px;
-    font-size: 0.85rem;
+    padding: 0.7rem 0.55rem;
+
+    font-size: 0.76rem;
+    letter-spacing: 0.07em;
+  }
+
+  .infoGrid {
+    margin-top: 2.15rem;
+    gap: 0.68rem;
+  }
+
+  .infoCard {
+    padding: 1.5rem 0.9rem;
+    border-radius: 12px;
+  }
+
+  .infoLabel {
+    margin-bottom: 0.5rem;
+    font-size: 0.55rem;
+  }
+
+  .infoCard p {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    letter-spacing: 0.055em;
   }
 }
+
 
 @media (min-width: 768px) and (max-width: 900px) {
   .contactSection {
@@ -521,12 +568,12 @@
   }
 }
 
-@media (max-width: 380px) {
+@media (min-width: 361px) and (max-width: 380px) {
   .contactSection {
     padding:
-      clamp(2.8rem, 6.5vh, 3.6rem)
+      clamp(3.1rem, 7vh, 3.85rem)
       0.85rem
-      clamp(3.4rem, 7.5vh, 4.4rem);
+      clamp(2.5rem, 5.5vh, 3.2rem);
   }
 
   .inner {
@@ -534,16 +581,16 @@
   }
 
   .kicker {
-    margin-bottom: 1rem;
     margin-top: 2rem;
+    margin-bottom: 1rem;
 
-    font-size: 0.77rem;
+    font-size: 0.72rem;
     line-height: 1.3;
     letter-spacing: 0.15em;
   }
 
   .title {
-    font-size: clamp(5.65rem, 25vw, 5.95rem);
+    font-size: clamp(5.55rem, 24vw, 5.85rem);
     line-height: 0.86;
     letter-spacing: -0.035em;
   }
@@ -552,7 +599,7 @@
     width: min(100%, 335px);
     margin-top: 1.45rem;
 
-    font-size: 1rem;
+    font-size: 0.96rem;
     line-height: 1.65;
     letter-spacing: 0.015em;
     word-spacing: 0.06rem;
@@ -561,7 +608,6 @@
   .actions {
     width: min(100%, 330px);
     margin-top: 1.85rem;
-
     gap: 0.75rem;
   }
 
@@ -570,7 +616,7 @@
     min-height: 50px;
     padding: 0.76rem 0.7rem;
 
-    font-size: 0.88rem;
+    font-size: 0.86rem;
   }
 
   .infoGrid {
@@ -585,11 +631,11 @@
 
   .infoLabel {
     margin-bottom: 0.55rem;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
   }
 
   .infoCard p {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     line-height: 1.45;
   }
 }
