@@ -892,6 +892,11 @@
     line-height: 1.12;
   }
 
+  .footerLeft,
+  .footerTitle {
+    font-size: 16px;
+  }
+
   .footerSub {
     margin-top: 4px;
 
