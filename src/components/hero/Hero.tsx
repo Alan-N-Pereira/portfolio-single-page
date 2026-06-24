@@ -526,7 +526,11 @@ export default function Hero({
       ease: "power3.out",
     });
 
+    const isMobileDevice = window.matchMedia("(max-width: 900px)").matches;
+
     const onMove = (e: MouseEvent) => {
+      if (isMobileDevice) return;
+
       const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
 
       quickTitle(xMove * 3);
@@ -534,7 +538,58 @@ export default function Hero({
       quickBg(xMove * 1.7);
     };
 
+    const onDeviceOrientation = (e: DeviceOrientationEvent) => {
+      if (!isMobileDevice) return;
+
+      const gamma = e.gamma ?? 0; // left/right tilt
+      const beta = e.beta ?? 0;   // front/back tilt
+
+      const xMove = gsap.utils.clamp(-1, 1, gamma / 22);
+      const yMove = gsap.utils.clamp(-1, 1, (beta - 45) / 28);
+
+      quickTitle(xMove * 18);
+      quickSky(xMove * 8);
+      quickBg(xMove * 14);
+
+      gsap.to(alan, {
+        xPercent: -50 + xMove * 1.8,
+        y: yMove * 5,
+        duration: 0.45,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    };
+
+    const enableGyroParallax = async () => {
+      if (!isMobileDevice) return;
+      if (!("DeviceOrientationEvent" in window)) return;
+
+      const DeviceOrientation =
+        window.DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+          requestPermission?: () => Promise<PermissionState>;
+        };
+
+      try {
+        if (typeof DeviceOrientation.requestPermission === "function") {
+          const permission = await DeviceOrientation.requestPermission();
+
+          if (permission !== "granted") return;
+        }
+
+        window.addEventListener("deviceorientation", onDeviceOrientation);
+      } catch {
+        // If permission fails, just keep the hero without gyro parallax.
+      }
+    };
+
     main.addEventListener("mousemove", onMove);
+
+    /*
+      iPhone needs this to happen from a real user action.
+      The first tap anywhere on the hero enables gyro.
+    */
+    main.addEventListener("click", enableGyroParallax, { once: true });
+    main.addEventListener("touchstart", enableGyroParallax, { once: true });
 
     const onResize = () => {
       requestAnimationFrame(positionBubbleToAlanHead);
@@ -544,6 +599,9 @@ export default function Hero({
 
     return () => {
       main.removeEventListener("mousemove", onMove);
+      main.removeEventListener("click", enableGyroParallax);
+      main.removeEventListener("touchstart", enableGyroParallax);
+      window.removeEventListener("deviceorientation", onDeviceOrientation);
       window.removeEventListener("resize", onResize);
 
       tl.kill();
