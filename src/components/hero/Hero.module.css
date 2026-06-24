@@ -883,6 +883,10 @@
     width: 47%;
   }
 
+  .footerLeft {
+    transform: translateY(-7px);
+  }
+
   .footerTitle {
     font-size: 14px;
     line-height: 1.12;
