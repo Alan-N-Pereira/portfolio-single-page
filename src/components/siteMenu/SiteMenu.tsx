@@ -144,6 +144,18 @@ export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
 
   const handleNavClick = (label: string, id: string) => {
     setOpen(false);
+
+    if (id === "contact") {
+      window.dispatchEvent(new CustomEvent("portfolio-contact-request"));
+      return;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("portfolio-menu-navigation", {
+        detail: { targetId: id },
+      })
+    );
+
     onNavigate(label, id);
   };
 

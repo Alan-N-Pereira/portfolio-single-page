@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  type ReactNode,
-} from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
@@ -19,6 +14,8 @@ type PageTransitionProps = {
   className?: string;
 };
 
+type TransitionPhase = "projects" | "forward" | "contact" | "reverse";
+
 export default function PageTransition({
   title,
   children,
@@ -30,30 +27,10 @@ export default function PageTransition({
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const transitionsLockedRef = useRef(false);
-
-  type TransitionPhase = "projects" | "forward" | "contact" | "reverse";
-
   const phaseRef = useRef<TransitionPhase>("projects");
 
-  useEffect(() => {
-    const onLockChange = (event: Event) => {
-      const customEvent = event as CustomEvent<{ locked?: boolean }>;
-      transitionsLockedRef.current = !!customEvent.detail?.locked;
-    };
-
-    window.addEventListener(
-      "section-transition-lock",
-      onLockChange as EventListener
-    );
-
-    return () => {
-      window.removeEventListener(
-        "section-transition-lock",
-        onLockChange as EventListener
-      );
-    };
-  }, []);
+  const menuNavigationUntilRef = useRef(0);
+  const menuTargetRef = useRef<string | null>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -62,15 +39,7 @@ export default function PageTransition({
     const heading = titleRef.current;
     const content = contentRef.current;
 
-    if (
-      !section ||
-      !overlay ||
-      !path ||
-      !heading ||
-      !content
-    ) {
-      return;
-    }
+    if (!section || !overlay || !path || !heading || !content) return;
 
     const ctx = gsap.context(() => {
       const setStartState = () => {
@@ -105,23 +74,40 @@ export default function PageTransition({
         });
       };
 
+      const isMenuNavigating = () => {
+        return Date.now() < menuNavigationUntilRef.current;
+      };
+
       const getSectionTop = () => {
         return Math.round(
           window.scrollY + section.getBoundingClientRect().top
         );
       };
 
+      const getForwardOffset = () => {
+        const height = window.innerHeight;
+        const width = window.innerWidth;
+
+        if (width <= 767) return Math.round(height * 0.24);
+        if (width <= 1024) return Math.round(height * 0.18);
+
+        return Math.round(height * 0.14);
+      };
+
+      const getForwardTriggerTop = () => {
+        const contactTop = getSectionTop();
+
+        return Math.max(
+          0,
+          contactTop - window.innerHeight - getForwardOffset()
+        );
+      };
+
       const jumpToContact = () => {
         const contactTop = getSectionTop();
 
-        /*
-          Place the page slightly inside Contact.
-
-          This means scrolling upward by only a few pixels
-          crosses the reverse trigger.
-        */
         window.scrollTo({
-          top: contactTop + 4,
+          top: contactTop + 1,
           left: 0,
           behavior: "auto",
         });
@@ -130,19 +116,8 @@ export default function PageTransition({
       };
 
       const jumpToProjectsEnd = () => {
-        const contactTop = getSectionTop();
-
-        /*
-          Stop slightly before the Contact boundary.
-
-          Do not use exactly:
-          contactTop - window.innerHeight
-
-          Landing exactly on the boundary can immediately
-          trigger the forward animation again.
-        */
         window.scrollTo({
-          top: Math.max(0, contactTop - window.innerHeight - 12),
+          top: Math.max(0, getForwardTriggerTop() - 1),
           left: 0,
           behavior: "auto",
         });
@@ -175,11 +150,7 @@ export default function PageTransition({
           },
           0.42
         )
-
-        // The blue transition is covering the screen here,
-        // so move from Projects to Contact behind it.
         .add(jumpToContact, 0.96)
-
         .to(
           heading,
           {
@@ -221,9 +192,11 @@ export default function PageTransition({
           strokeWidth: 2,
         });
 
-        forwardTl.eventCallback("onComplete", () => {
-          phaseRef.current = "contact";
-        });
+      forwardTl.eventCallback("onComplete", () => {
+        phaseRef.current = "contact";
+        setEndState();
+        ScrollTrigger.update();
+      });
 
       const reverseTl = gsap.timeline({
         paused: true,
@@ -231,62 +204,54 @@ export default function PageTransition({
       });
 
       reverseTl
-      .set(overlay, { autoAlpha: 1 })
-      .set(heading, { autoAlpha: 0, y: 0 })
-      .set(path, {
-        drawSVG: "100% 100%",
-        strokeWidth: 2,
-      })
-      .to(
-        content,
-        {
-          autoAlpha: 0,
-          y: 28,
-          duration: 0.26,
-          ease: "power2.out",
-        },
-        0
-      )
-      .to(
-        path,
-        {
-          drawSVG: "0% 100%",
-          strokeWidth: 300,
-          duration: 0.9,
-        },
-        0.02
-      )
-
-      // Move back to the final project while the screen is covered.
-      .add(jumpToProjectsEnd, 0.72)
-
-      .to(
-        overlay,
-        {
-          autoAlpha: 0,
-          duration: 0.32,
-        },
-        0.82
-      )
-      .set(path, {
-        drawSVG: "0%",
-        strokeWidth: 2,
-      });
+        .set(overlay, { autoAlpha: 1 })
+        .set(heading, { autoAlpha: 0, y: 0 })
+        .set(path, {
+          drawSVG: "100% 100%",
+          strokeWidth: 2,
+        })
+        .to(
+          content,
+          {
+            autoAlpha: 0,
+            y: 28,
+            duration: 0.26,
+            ease: "power2.out",
+          },
+          0
+        )
+        .to(
+          path,
+          {
+            drawSVG: "0% 100%",
+            strokeWidth: 300,
+            duration: 0.9,
+          },
+          0.02
+        )
+        .add(jumpToProjectsEnd, 0.72)
+        .to(
+          overlay,
+          {
+            autoAlpha: 0,
+            duration: 0.32,
+          },
+          0.82
+        )
+        .set(path, {
+          drawSVG: "0%",
+          strokeWidth: 2,
+        });
 
       reverseTl.eventCallback("onComplete", () => {
         phaseRef.current = "projects";
+        setStartState();
+        ScrollTrigger.update();
       });
 
       const playForward = () => {
-        if (phaseRef.current !== "projects") return;
-
-        if (transitionsLockedRef.current) {
-          phaseRef.current = "contact";
-
-          jumpToContact();
-          setEndState();
-          return;
-        }
+        if (phaseRef.current === "forward") return;
+        if (phaseRef.current === "contact") return;
 
         phaseRef.current = "forward";
 
@@ -299,10 +264,12 @@ export default function PageTransition({
       const playReverse = () => {
         if (phaseRef.current !== "contact") return;
 
-        if (transitionsLockedRef.current) {
+        if (isMenuNavigating() && menuTargetRef.current !== "contact") {
           phaseRef.current = "projects";
 
-          jumpToProjectsEnd();
+          forwardTl.pause(0);
+          reverseTl.pause(0);
+
           setStartState();
           return;
         }
@@ -313,9 +280,41 @@ export default function PageTransition({
         reverseTl.restart();
       };
 
-      const sectionRect = section.getBoundingClientRect();
+      const onContactRequest = () => {
+        menuTargetRef.current = "contact";
+        menuNavigationUntilRef.current = Date.now() + 2600;
 
-      const contactHasStarted = sectionRect.top <= 4 && sectionRect.bottom > 0;
+        if (phaseRef.current === "contact") {
+          jumpToContact();
+          setEndState();
+          return;
+        }
+
+        playForward();
+      };
+
+      const onMenuNavigation = (event: Event) => {
+        const customEvent = event as CustomEvent<{ targetId?: string }>;
+        const targetId = customEvent.detail?.targetId ?? null;
+
+        menuTargetRef.current = targetId;
+        menuNavigationUntilRef.current = Date.now() + 2200;
+
+        if (targetId !== "contact") {
+          phaseRef.current = "projects";
+
+          forwardTl.pause(0);
+          reverseTl.pause(0);
+
+          setStartState();
+        }
+      };
+
+      window.addEventListener("portfolio-contact-request", onContactRequest);
+      window.addEventListener("portfolio-menu-navigation", onMenuNavigation);
+
+      const sectionRect = section.getBoundingClientRect();
+      const contactHasStarted = sectionRect.top <= 2 && sectionRect.bottom > 0;
 
       if (contactHasStarted) {
         phaseRef.current = "contact";
@@ -327,17 +326,12 @@ export default function PageTransition({
 
       const enterST = ScrollTrigger.create({
         trigger: section,
-
-        /*
-          Wait until Contact has moved a few pixels
-          inside the viewport.
-        */
-        start: "top bottom-=4",
-
+        start: () => `top bottom+=${getForwardOffset()}`,
         invalidateOnRefresh: true,
 
         onEnter: () => {
           if (phaseRef.current !== "projects") return;
+          if (isMenuNavigating() && menuTargetRef.current === "contact") return;
 
           playForward();
         },
@@ -345,15 +339,7 @@ export default function PageTransition({
 
       const reverseST = ScrollTrigger.create({
         trigger: section,
-
-        /*
-          After the forward transition, the page sits at
-          contactTop + 4.
-
-          Scrolling upward slightly crosses this point.
-        */
         start: "top top",
-
         invalidateOnRefresh: true,
 
         onLeaveBack: () => {
@@ -364,6 +350,15 @@ export default function PageTransition({
       });
 
       return () => {
+        window.removeEventListener(
+          "portfolio-contact-request",
+          onContactRequest
+        );
+        window.removeEventListener(
+          "portfolio-menu-navigation",
+          onMenuNavigation
+        );
+
         enterST.kill();
         reverseST.kill();
         forwardTl.kill();
@@ -371,7 +366,7 @@ export default function PageTransition({
       };
     }, section);
 
-    ScrollTrigger.refresh();
+    requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
       ctx.revert();
@@ -383,7 +378,6 @@ export default function PageTransition({
       ref={sectionRef}
       className={`${styles.transitionSection} ${className}`.trim()}
     >
-
       <div ref={overlayRef} className={styles.transitionOverlay}>
         <svg
           className={styles.transitionSvg}

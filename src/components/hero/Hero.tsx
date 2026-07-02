@@ -963,7 +963,7 @@ export default function Hero({
                     ref={alanRef}
                     className={styles.alan}
                     data-alan="true"
-                    src="/hero/alan1.png"
+                    src="/hero/alan.png"
                     alt=""
                   />
 
