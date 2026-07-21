@@ -3,6 +3,14 @@
   width: 100%;
 }
 
+.transitionGate {
+  position: relative;
+  width: 100%;
+  height: 20svh;
+  min-height: 20vh;
+  background: #000000;
+}
+
 .transitionOverlay {
   position: fixed;
   inset: 0;

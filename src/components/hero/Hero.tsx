@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
+import { createPortal } from "react-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -21,12 +22,22 @@ type BubbleItem = {
   actionTarget?: string;
 };
 
+const LOADER_WORDS = ["HI", "HOLA", "CIAO", "SALUT", "OLÁ"] as const;
+
+const HERO_MINIMUM_LOAD_MS = 3200;
+const HERO_MAXIMUM_LOAD_MS = 8000;
+
 export default function Hero({
   aboutSectionRef,
   onIntroComplete,
   onNavigate,
 }: HeroProps) {
   const [showContent, setShowContent] = useState(false);
+  const [heroAssetsReady, setHeroAssetsReady] = useState(false);
+
+  const [portalReady, setPortalReady] = useState(false);
+  const [introBgSrc, setIntroBgSrc] = useState("/hero/bg.webp");
+
   const [aboutSettled, setAboutSettled] = useState(false);
   const [showAboutBody, setShowAboutBody] = useState(false);
   const [bubbleIndex, setBubbleIndex] = useState(0);
@@ -34,12 +45,18 @@ export default function Hero({
   const [showBubble, setShowBubble] = useState(false);
   const [typedBubbleText, setTypedBubbleText] = useState("");
 
-  const [bgImageSrc, setBgImageSrc] = useState("/hero/bg.png");
 
   const heroBubbleWrapRef = useRef<HTMLDivElement | null>(null);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
   const pinWrapRef = useRef<HTMLDivElement | null>(null);
+
+  const loaderHiRef = useRef<HTMLDivElement | null>(null);
+  const maskGroupRef = useRef<SVGGElement | null>(null);
+  const maskedImageGroupRef = useRef<SVGGElement | null>(null);
+  const solidHiRef = useRef<SVGGElement | null>(null);
+
+  const onIntroCompleteRef = useRef(onIntroComplete);
 
   const aboutFlowWrapRef = useRef<HTMLElement | null>(null);
 
@@ -102,36 +119,154 @@ export default function Hero({
   };
 
   useEffect(() => {
-    const updateBgImage = () => {
-      const width = window.innerWidth;
+    onIntroCompleteRef.current = onIntroComplete;
+  }, [onIntroComplete]);
 
-      if (width <= 900) {
-        setBgImageSrc("/hero/bg-mobile.png");
-      } else {
-        setBgImageSrc("/hero/bg.png");
-      }
-    };
+  useEffect(() => {
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
 
-    updateBgImage();
-
-    window.addEventListener("resize", updateBgImage);
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      window.removeEventListener("resize", updateBgImage);
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.body.style.overflow = previousBodyOverflow;
     };
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
+  const mobileBackground = window.matchMedia("(max-width: 900px)").matches;
 
-    const root = rootRef.current;
-    if (!root) return;
+  setIntroBgSrc(
+    mobileBackground
+      ? "/hero/bg-mobile.webp"
+      : "/hero/bg.webp"
+  );
 
-    const maskGroup = root.querySelector<SVGGElement>(".vi-mask-group");
-    const solidHi = root.querySelector<SVGGElement>(".hi-solid");
+  setPortalReady(true);
+}, []);
 
-    if (!maskGroup || !solidHi) return;
+  useEffect(() => {
+    const sky = skyRef.current;
+    const background = bgRef.current;
+    const alan = alanRef.current;
+
+    if (!sky || !background || !alan) return;
+
+    let cancelled = false;
+    let minimumTimer = 0;
+    let maximumTimer = 0;
+
+    const imageCleanups: Array<() => void> = [];
+
+    const waitForImage = (image: HTMLImageElement) => {
+      return new Promise<void>((resolve) => {
+        let finished = false;
+
+        const cleanup = () => {
+          image.removeEventListener("load", onLoad);
+          image.removeEventListener("error", onError);
+        };
+
+        const finish = async () => {
+          if (finished) return;
+
+          finished = true;
+          cleanup();
+
+          try {
+            await image.decode();
+          } catch {
+            // A decode failure should not trap the visitor on the loader.
+          }
+
+          resolve();
+        };
+
+        const onLoad = () => {
+          void finish();
+        };
+
+        const onError = () => {
+          if (finished) return;
+
+          finished = true;
+          cleanup();
+          resolve();
+        };
+
+        if (image.complete) {
+          if (image.naturalWidth > 0) {
+            void finish();
+          } else {
+            onError();
+          }
+
+          return;
+        }
+
+        image.addEventListener("load", onLoad, { once: true });
+        image.addEventListener("error", onError, { once: true });
+        imageCleanups.push(cleanup);
+      });
+    };
+
+    const fontsReady =
+      "fonts" in document
+        ? Promise.all([
+            document.fonts.load('250px "MainText"'),
+            document.fonts.ready,
+          ])
+            .then(() => undefined)
+            .catch(() => undefined)
+        : Promise.resolve();
+
+    const criticalAssetsReady = Promise.all([
+      waitForImage(sky),
+      waitForImage(background),
+      waitForImage(alan),
+      fontsReady,
+    ]).then(() => undefined);
+
+    const minimumVisibleTime = new Promise<void>((resolve) => {
+      minimumTimer = window.setTimeout(resolve, HERO_MINIMUM_LOAD_MS);
+    });
+
+    const maximumWait = new Promise<void>((resolve) => {
+      maximumTimer = window.setTimeout(resolve, HERO_MAXIMUM_LOAD_MS);
+    });
+
+    Promise.all([
+      Promise.race([criticalAssetsReady, maximumWait]),
+      minimumVisibleTime,
+    ]).then(() => {
+      window.clearTimeout(maximumTimer);
+
+      if (!cancelled) {
+        setHeroAssetsReady(true);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(minimumTimer);
+      window.clearTimeout(maximumTimer);
+      imageCleanups.forEach((cleanup) => cleanup());
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!heroAssetsReady) return;
+
+    const loaderHi = loaderHiRef.current;
+    const maskGroup = maskGroupRef.current;
+    const maskedImageGroup = maskedImageGroupRef.current;
+    const solidHi = solidHiRef.current;
+
+    if (!loaderHi || !maskGroup || !maskedImageGroup || !solidHi) {
+      return;
+    }
 
     const tl = gsap.timeline({
       defaults: {
@@ -139,38 +274,61 @@ export default function Hero({
       },
     });
 
-    tl.set(solidHi, { opacity: 1 });
-    tl.to({}, { duration: 0.3 });
-
-    tl.to(solidHi, {
-      opacity: 0,
-      duration: 1.8,
-      ease: "power2.inOut",
+    gsap.set(maskGroup, {
+      rotate: 0,
+      scale: 1,
+      opacity: 1,
     });
 
-    tl.to(maskGroup, {
-      rotate: 10,
-      duration: 2,
-      ease: "power4.inOut",
-    }).to(
-      maskGroup,
-      {
-        scale: 10,
-        duration: 2,
-        ease: "expo.inOut",
-        opacity: 0,
-        onComplete: () => {
-          setShowContent(true);
-          onIntroComplete?.();
+    gsap.set(loaderHi, { autoAlpha: 1 });
+    gsap.set(maskedImageGroup, { autoAlpha: 0 });
+    gsap.set(solidHi, { autoAlpha: 0 });
+
+    tl.to(loaderHi, {
+      autoAlpha: 0,
+      duration: 0.16,
+      ease: "power2.out",
+    })
+      .set(maskedImageGroup, { autoAlpha: 1 })
+      .to(
+        solidHi,
+        {
+          autoAlpha: 1,
+          duration: 0.22,
+          ease: "power2.out",
         },
-      },
-      "-=1.8"
-    );
+        "<"
+      )
+      .to({}, { duration: 0.25 })
+      .to(solidHi, {
+        autoAlpha: 0,
+        duration: 1.8,
+        ease: "power2.inOut",
+      })
+      .to(maskGroup, {
+        rotate: 10,
+        duration: 2,
+        ease: "power4.inOut",
+      })
+      .to(
+        maskGroup,
+        {
+          scale: 10,
+          duration: 2,
+          ease: "expo.inOut",
+          opacity: 0,
+          onComplete: () => {
+            setShowContent(true);
+            onIntroCompleteRef.current?.();
+          },
+        },
+        "-=1.8"
+      );
 
     return () => {
       tl.kill();
     };
-  }, [onIntroComplete]);
+  }, [heroAssetsReady]);
 
   useEffect(() => {
     if (!showContent) return;
@@ -869,40 +1027,36 @@ export default function Hero({
     return () => ctx.revert();
   }, [showContent]);
 
-  return (
-    <div ref={rootRef} className={styles.root}>
-      {!showContent && (
-        <div className={styles.svgOverlay}>
-          <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <mask id="hiMask">
-                <rect width="100%" height="100%" fill="black" />
+  const introOverlay = (
+    <div className={styles.svgOverlay}>
+      <div
+        ref={loaderHiRef}
+        className={styles.languageLoader}
+        aria-hidden="true"
+      >
+        {LOADER_WORDS.map((word, index) => (
+          <span
+            key={word}
+            className={`${styles.languageWord} ${
+              styles[`languageWord${index + 1}`]
+            }`}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
 
-                <g className="vi-mask-group">
-                  <text
-                    x="50%"
-                    y="50%"
-                    fontSize="250"
-                    textAnchor="middle"
-                    fill="white"
-                    dominantBaseline="middle"
-                    fontFamily="MainText"
-                  >
-                    HI
-                  </text>
-                </g>
-              </mask>
-            </defs>
+      <svg
+        className={styles.introSvg}
+        viewBox="0 0 800 600"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <defs>
+          <mask id="hiMask">
+            <rect width="100%" height="100%" fill="black" />
 
-            <image
-              href="/hero/bg.png"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              mask="url(#hiMask)"
-            />
-
-            <g className="hi-solid">
+            <g ref={maskGroupRef} className="vi-mask-group">
               <text
                 x="50%"
                 y="50%"
@@ -915,13 +1069,59 @@ export default function Hero({
                 HI
               </text>
             </g>
-          </svg>
-        </div>
-      )}
+          </mask>
+        </defs>
 
-      {showContent && (
-        <>
-          <div ref={pinWrapRef} className={styles.pinWrap}>
+        <g
+          ref={maskedImageGroupRef}
+          className={styles.hiMaskedImageGroup}
+          mask="url(#hiMask)"
+        >
+          <image
+            href={introBgSrc}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid slice"
+          />
+        </g>
+
+        <g ref={solidHiRef} className={styles.hiOriginal}>
+          <text
+            x="50%"
+            y="50%"
+            fontSize="250"
+            textAnchor="middle"
+            fill="white"
+            dominantBaseline="middle"
+            fontFamily="MainText"
+          >
+            HI
+          </text>
+        </g>
+      </svg>
+    </div>
+  );
+
+  return (
+  <>
+    {portalReady && !showContent
+      ? createPortal(introOverlay, document.body)
+      : null}
+
+    <div
+      ref={rootRef}
+      className={`${styles.root} ${
+        !showContent ? styles.introPending : ""
+      }`}
+    >
+
+      <div
+        ref={pinWrapRef}
+        className={styles.pinWrap}
+        aria-hidden={!showContent}
+      >
             <div
               ref={heroMainRef}
               className={styles.main}
@@ -939,16 +1139,29 @@ export default function Hero({
                   <img
                     ref={skyRef}
                     className={`${styles.sky} ${styles.skyScale}`}
-                    src="/hero/sky.png"
+                    src="/hero/sky.webp"
                     alt=""
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                   />
 
-                  <img
-                    ref={bgRef}
-                    className={`${styles.bg} ${styles.bgScale}`}
-                    src={bgImageSrc}
-                    alt=""
-                  />
+                  <picture className={styles.bgPicture}>
+                    <source
+                      media="(max-width: 900px)"
+                      srcSet="/hero/bg-mobile.webp"
+                    />
+
+                    <img
+                      ref={bgRef}
+                      className={`${styles.bg} ${styles.bgScale}`}
+                      src="/hero/bg.webp"
+                      alt=""
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                    />
+                  </picture>
 
                   <div
                     ref={heroTitleRef}
@@ -963,8 +1176,11 @@ export default function Hero({
                     ref={alanRef}
                     className={styles.alan}
                     data-alan="true"
-                    src="/hero/alan.png"
+                    src="/hero/alan.webp"
                     alt=""
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                   />
 
                   <div
@@ -1029,7 +1245,8 @@ export default function Hero({
             </div>
           </div>
 
-          <section ref={aboutFlowWrapRef} className={styles.aboutFlowWrap}>
+      {showContent && (
+        <section ref={aboutFlowWrapRef} className={styles.aboutFlowWrap}>
             <div
               ref={aboutOverlayRef}
               className={`${styles.aboutOverlay} ${
@@ -1148,9 +1365,9 @@ export default function Hero({
                 Scroll to see the story behind that.
               </p>
             </div>
-          </section>
-        </>
+        </section>
       )}
     </div>
+  </>
   );
 }

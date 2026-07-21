@@ -1,31 +1,152 @@
 .root {
   width: 100%;
+  min-height: 100vh;
+  background: #000;
+}
+
+.introPending .main {
+  transform: scale(2) rotate(-10deg);
+  transform-origin: 50% 50%;
+}
+
+.introPending .text {
+  opacity: 0;
+  transform: translateX(-50%) translateY(250px);
+}
+
+.introPending .heroBubbleWrap {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(40px);
 }
 
 /* ======================================================
-   INTRO SVG OVERLAY
+   INTRO LOADING OVERLAY
 ====================================================== */
 
 .svgOverlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 99999;
 
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  height: 100dvh;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 
   overflow: hidden;
+  isolation: isolate;
+
   background: #000;
+
+  pointer-events: none;
 }
 
-.svgOverlay svg {
+.introSvg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
   display: block;
+
   width: 100%;
   height: 100%;
+}
+
+/* ======================================================
+   LANGUAGE LOADING LOOP
+====================================================== */
+
+.languageLoader {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+.languageWord {
+  grid-area: 1 / 1;
+
+  margin: 0;
+
+  color: #fff;
+
+  font-family:
+    "Arial Black",
+    Impact,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  font-size: clamp(3.75rem, 18vw, 16rem);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+
+  white-space: nowrap;
+  text-align: center;
+  text-transform: uppercase;
+
+  opacity: 0;
+
+  transform: scale(0.96);
+  transform-origin: center;
+
+  will-change: opacity, transform;
+
+  animation: languageWordLoop 3s ease-in-out infinite;
+}
+
+.languageWord1 {
+  animation-delay: 0s;
+}
+
+.languageWord2 {
+  animation-delay: 0.6s;
+}
+
+.languageWord3 {
+  animation-delay: 1.2s;
+}
+
+.languageWord4 {
+  animation-delay: 1.8s;
+}
+
+.languageWord5 {
+  animation-delay: 2.4s;
+}
+
+@keyframes languageWordLoop {
+  0%,
+  16% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  20%,
+  100% {
+    opacity: 0;
+    transform: scale(1.025);
+  }
+}
+
+/* ======================================================
+   ORIGINAL FINAL HI
+====================================================== */
+
+.hiMaskedImageGroup,
+.hiOriginal {
+  opacity: 0;
 }
 
 /* ======================================================
@@ -133,6 +254,15 @@
   height: 100vh;
 
   overflow: hidden;
+}
+
+.bgPicture {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .sky,
@@ -775,6 +905,13 @@
     overflow-x: clip;
   }
 
+  .languageWord {
+  max-width: 94vw;
+
+  font-size: clamp(3.5rem, 18vw, 5.25rem);
+  letter-spacing: -0.045em;
+}
+
   .pinWrap {
     min-height: 100dvh;
   }
@@ -977,6 +1114,11 @@
 ====================================================== */
 
 @media (max-width: 360px) {
+
+  .languageWord {
+  font-size: clamp(3.2rem, 17vw, 4.5rem);
+}
+
   .btmbar {
     padding-inline: 16px;
   }
@@ -1177,6 +1319,16 @@
    MOBILE + TABLET
    0px — 900px
 ====================================================== */
+
+@media (max-width: 900px) {
+  .introImageDesktop {
+    display: none;
+  }
+
+  .introImageMobile {
+    display: block;
+  }
+}
 
 @media (max-width: 900px) {
   .heroBubble::after {

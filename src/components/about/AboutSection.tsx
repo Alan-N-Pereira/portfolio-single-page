@@ -220,7 +220,7 @@ const AboutSection = forwardRef<HTMLElement, Props>(function AboutSection(_props
             <img
               ref={bgRef}
               className={styles.bgLayer}
-              src="/about/about-bg.png"
+              src="/about/about-bg.webp"
               alt=""
               aria-hidden="true"
               draggable={false}
@@ -250,7 +250,7 @@ const AboutSection = forwardRef<HTMLElement, Props>(function AboutSection(_props
           <img
             ref={charRef}
             className={styles.charLayer}
-            src="/about/about-character.png"
+            src="/about/about-character.webp"
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -268,13 +268,13 @@ const AboutSection = forwardRef<HTMLElement, Props>(function AboutSection(_props
                 <div className={styles.dialogInner}>
                   <div className={styles.faceWrap}>
                     <img
-                      src="/about/Al-Sad.png"
+                      src="/about/Al-Sad.webp"
                       alt="Sad Alan"
                       className={`${styles.faceImage} ${isSolved ? styles.faceHidden : styles.faceVisible}`}
                       draggable={false}
                     />
                     <img
-                      src="/about/Al-Happy.png"
+                      src="/about/Al-Happy.webp"
                       alt="Happy Alan"
                       className={`${styles.faceImage} ${isSolved ? styles.faceVisible : styles.faceHidden}`}
                       draggable={false}
