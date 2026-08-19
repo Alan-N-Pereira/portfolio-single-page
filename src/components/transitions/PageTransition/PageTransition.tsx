@@ -100,35 +100,15 @@ export default function PageTransition({
         Math.max(0, Math.min(top, getMaxScrollTop()))
       );
 
-      const scrollElement =
-        document.scrollingElement || document.documentElement;
-
-      window.scrollTo({
-        top: targetY,
-        left: 0,
-        behavior: "auto",
-      });
-
-      scrollElement.scrollTop = targetY;
-      document.documentElement.scrollTop = targetY;
-      document.body.scrollTop = targetY;
+      window.dispatchEvent(
+        new CustomEvent("portfolio-scroll-to", {
+          detail: {
+            top: targetY,
+          },
+        })
+      );
 
       ScrollTrigger.update();
-
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: targetY,
-          left: 0,
-          behavior: "auto",
-        });
-
-        scrollElement.scrollTop = targetY;
-        document.documentElement.scrollTop = targetY;
-        document.body.scrollTop = targetY;
-
-        ScrollTrigger.refresh();
-        ScrollTrigger.update();
-      });
     };
 
     const moveIntoContactUnderCover = () => {

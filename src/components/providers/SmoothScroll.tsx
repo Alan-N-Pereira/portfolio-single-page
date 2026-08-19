@@ -21,6 +21,24 @@ export default function SmoothScroll() {
       touchMultiplier: 1,
     });
 
+    const onPortfolioScrollTo = (event: Event) => {
+      const customEvent = event as CustomEvent<{ top?: number }>;
+      const top = customEvent.detail?.top;
+
+      if (typeof top !== "number") return;
+
+      lenis.scrollTo(top, {
+        immediate: true,
+      });
+
+      ScrollTrigger.update();
+    };
+
+    window.addEventListener(
+      "portfolio-scroll-to",
+      onPortfolioScrollTo as EventListener
+    );
+
     // ✅ Let ScrollTrigger read/write scroll positions through Lenis
     ScrollTrigger.scrollerProxy(document.documentElement, {
       scrollTop(value) {
@@ -62,6 +80,10 @@ export default function SmoothScroll() {
     return () => {
       gsap.ticker.remove(tick);
       ScrollTrigger.scrollerProxy(document.documentElement, null as any);
+      window.removeEventListener(
+        "portfolio-scroll-to",
+        onPortfolioScrollTo as EventListener
+      );
       lenis.destroy();
     };
   }, []);

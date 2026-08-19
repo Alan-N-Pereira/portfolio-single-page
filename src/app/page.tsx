@@ -17,29 +17,23 @@ export default function Home() {
   const globalTransitionRef = useRef<GlobalPageTransitionHandle | null>(null);
 
   const jumpToSectionInstant = (id: string) => {
-    const root = document.documentElement;
-    const body = document.body;
+    let top = 0;
 
-    const prevRootBehavior = root.style.scrollBehavior;
-    const prevBodyBehavior = body.style.scrollBehavior;
-
-    root.style.scrollBehavior = "auto";
-    body.style.scrollBehavior = "auto";
-
-    if (id === "home") {
-      window.scrollTo(0, 0);
-    } else {
+    if (id !== "home") {
       const el = document.getElementById(id);
-      if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo(0, top);
-      }
+
+      if (!el) return;
+
+      top =
+        el.getBoundingClientRect().top +
+        window.scrollY;
     }
 
-    requestAnimationFrame(() => {
-      root.style.scrollBehavior = prevRootBehavior;
-      body.style.scrollBehavior = prevBodyBehavior;
-    });
+    window.dispatchEvent(
+      new CustomEvent("portfolio-scroll-to", {
+        detail: { top },
+      })
+    );
   };
 
   const setSectionTransitionLock = (locked: boolean) => {

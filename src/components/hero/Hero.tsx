@@ -216,6 +216,7 @@ export default function Hero({
       "fonts" in document
         ? Promise.all([
             document.fonts.load('250px "MainText"'),
+            document.fonts.load('1rem "SGCO"'),
             document.fonts.ready,
           ])
             .then(() => undefined)
