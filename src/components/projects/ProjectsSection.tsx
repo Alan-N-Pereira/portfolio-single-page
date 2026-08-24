@@ -7,42 +7,86 @@ import styles from "./ProjectsSection.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// const projects = [
+//   {
+//     id: "card-1",
+//     className: "card1",
+//     eyebrow: "Featured Project",
+//     title: "Signal Drift",
+//     subtitle: "Motion-led storytelling for a cinematic digital experience.",
+//     button: "View Project",
+//     index: "01",
+//   },
+//   {
+//     id: "card-2",
+//     className: "card2",
+//     eyebrow: "Creative Build",
+//     title: "Quiet Control",
+//     subtitle: "A premium interaction system built around clarity and pace.",
+//     button: "Open Case Study",
+//     index: "02",
+//   },
+//   {
+//     id: "card-3",
+//     className: "card3",
+//     eyebrow: "Case Study",
+//     title: "Midnight Atlas",
+//     subtitle: "Editorial layouts, bold hierarchy, and immersive scroll.",
+//     button: "See Details",
+//     index: "03",
+//   },
+//   {
+//     id: "card-4",
+//     className: "card4",
+//     eyebrow: "Experimental",
+//     title: "Static Echo",
+//     subtitle: "Poster-inspired composition with strong framing and mood.",
+//     button: "Explore Project",
+//     index: "04",
+//   },
+// ];
+
 const projects = [
   {
     id: "card-1",
     className: "card1",
     eyebrow: "Featured Project",
-    title: "Signal Drift",
-    subtitle: "Motion-led storytelling for a cinematic digital experience.",
-    button: "View Project",
+    title: "Voice to Code",
+    subtitle:
+      "A voice-driven coding concept that turns spoken input into structured code and visual feedback.",
+    image: "/projects/voice-to-code.webp",
+    imageAlt: "Voice to Code project infographic",
+    stack: ["Next.js", "TypeScript", "Voice"],
+    github: "https://github.com/Alan-N-Pereira/Voice2Code",
     index: "01",
   },
+
   {
     id: "card-2",
     className: "card2",
-    eyebrow: "Creative Build",
-    title: "Quiet Control",
-    subtitle: "A premium interaction system built around clarity and pace.",
-    button: "Open Case Study",
+    eyebrow: "Full-Stack Project",
+    title: "Pizzetta",
+    subtitle:
+      "A full-stack food ordering experience with product browsing, cart management and secure checkout.",
+    image: "/projects/pizzetta.webp",
+    imageAlt: "Pizzetta ecommerce project infographic",
+    stack: ["Next.js", "Redux", "MongoDB", "PayPal"],
+    github: "https://github.com/Alan-N-Pereira/Pizzetta",
     index: "02",
   },
+
   {
     id: "card-3",
     className: "card3",
-    eyebrow: "Case Study",
-    title: "Midnight Atlas",
-    subtitle: "Editorial layouts, bold hierarchy, and immersive scroll.",
-    button: "See Details",
+    eyebrow: "Platform Project",
+    title: "Clario",
+    subtitle:
+      "A configurable client portal for managing projects, proposals, invoices, tasks and client updates.",
+    image: "/projects/clario.webp",
+    imageAlt: "Clario client portal project infographic",
+    stack: ["Next.js", "Dashboard", "Client Portal"],
+    github: "https://github.com/Alan-N-Pereira/clario",
     index: "03",
-  },
-  {
-    id: "card-4",
-    className: "card4",
-    eyebrow: "Experimental",
-    title: "Static Echo",
-    subtitle: "Poster-inspired composition with strong framing and mood.",
-    button: "Explore Project",
-    index: "04",
   },
 ];
 
@@ -298,7 +342,7 @@ export default function ProjectsSection() {
                 <div className={styles.cardInner}>
                   <div className={styles.frame}>
                     <div className={styles.artwork}>
-                      <div className={styles.artworkSky} />
+                      {/* <div className={styles.artworkSky} />
                       <div className={styles.artworkGlow} />
                       <div className={styles.artworkGrain} />
 
@@ -314,6 +358,68 @@ export default function ProjectsSection() {
                         <button className={styles.cta} type="button">
                           {project.button}
                         </button>
+                      </div> */}
+
+                      <div className={styles.artworkSky} />
+                      <div className={styles.artworkGlow} />
+                      <div className={styles.artworkGrain} />
+
+                      <div className={styles.logoBlock}>
+                        <p className={styles.eyebrow}>{project.eyebrow}</p>
+
+                        <h2>{project.title}</h2>
+                      </div>
+
+                      <div className={styles.indexBadge}>
+                        {project.index}
+                      </div>
+
+                      <div className={styles.projectVisual}>
+                        <div className={styles.visualPanel}>
+                          <img
+                            src={project.image}
+                            alt={project.imageAlt}
+                            className={styles.projectImage}
+                            draggable={false}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.content}>
+                        <p className={styles.subtitle}>
+                          {project.subtitle}
+                        </p>
+
+                        <div className={styles.techStack}>
+                          {project.stack.map((tech) => (
+                            <span key={tech} className={styles.techTag}>
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className={styles.actions}>
+                          {project.github ? (
+                            <a
+                              href={project.github}
+                              target="_blank"
+                              rel="noreferrer"
+                              className={styles.ctaPrimary}
+                            >
+                              VIEW CODE ↗
+                            </a>
+                          ) : (
+                            <span
+                              className={`${styles.ctaPrimary} ${styles.ctaDisabled}`}
+                            >
+                              CODE SOON
+                            </span>
+                          )}
+
+                          <span className={styles.ctaSecondary}>
+                            LIVE SOON
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>

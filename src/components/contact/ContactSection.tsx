@@ -22,12 +22,12 @@ export default function ContactSection() {
           </p>
 
           <div className={styles.actions}>
-            <a href="mailto:yourmail@example.com" className={styles.primaryBtn}>
+            <a href="mailto:contact@alanpereira.dev" className={styles.primaryBtn}>
               EMAIL ME
             </a>
 
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/in/alan-n-pereira/"
               target="_blank"
               rel="noreferrer"
               className={styles.secondaryBtn}
@@ -39,7 +39,7 @@ export default function ContactSection() {
           <div className={styles.infoGrid}>
             <div className={styles.infoCard}>
               <span className={styles.infoLabel}>Email</span>
-              <p>yourmail@example.com</p>
+              <p>contact@alanpereira.dev</p>
             </div>
 
             <div className={styles.infoCard}>

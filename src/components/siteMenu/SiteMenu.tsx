@@ -210,7 +210,7 @@ export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
                   if (el) socialRefs.current[0] = el;
                 }}
                 className={styles.socialLink}
-                href="https://github.com/"
+                href="https://github.com/Alan-N-Pereira"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -222,7 +222,7 @@ export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
                   if (el) socialRefs.current[1] = el;
                 }}
                 className={styles.socialLink}
-                href="https://linkedin.com/"
+                href="https://www.linkedin.com/in/alan-n-pereira/"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -232,7 +232,7 @@ export default function SiteMenu({ visible, onNavigate }: SiteMenuProps) {
 
             <div ref={contactRef} className={styles.contactBlock}>
               <p className={styles.contactName}>Alan Pereira</p>
-              <p className={styles.contactMeta}>email@example.com</p>
+              <p className={styles.contactMeta}>contact@alanpereira.dev</p>
             </div>
           </div>
         </div>

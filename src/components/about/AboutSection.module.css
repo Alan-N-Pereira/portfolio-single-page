@@ -701,19 +701,25 @@
   }
 
   .aboutContent {
-    box-sizing: border-box;
+  box-sizing: border-box;
 
-    width: 100%;
-    min-height: 100vh;
-    padding: 5vh 2vw 0 6vw;
+  width: 100%;
+  min-height: 100svh;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: clamp(18px, 3vw, 40px);
+  padding:
+    4svh
+    2vw
+    0
+    7vw;
 
-    overflow: visible;
-  }
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: clamp(16px, 2.5vw, 34px);
+
+  overflow: visible;
+}
 
   /* ---------- BACKGROUND ---------- */
 
@@ -736,60 +742,66 @@
   /* ---------- TEXT ---------- */
 
   .copy {
-    position: relative;
-    z-index: 20;
+  position: relative;
+  z-index: 20;
 
-    width: auto;
-    max-width: 370px;
-    margin-left: 0;
+  width: min(40vw, 410px);
+  max-width: 410px;
 
-    flex: 0 1 39%;
-    align-self: center;
-    gap: 17px;
-  }
+  margin-left: 0;
+
+  flex: 0 1 42%;
+  align-self: center;
+
+  gap: 16px;
+}
 
   .kicker {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 
-    font-size: clamp(3.2rem, 7vw, 4.7rem);
-    line-height: 0.88;
-  }
+  font-size: clamp(4.7rem, 7vw, 5.35rem);
+  line-height: 0.88;
+}
 
   .subkicker {
-    max-width: 370px;
+  max-width: 390px;
 
-    font-size: clamp(1.45rem, 3.5vw, 2.25rem);
-    line-height: 1.2;
-    word-spacing: 0.2rem;
-  }
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  line-height: 1.22;
+
+  word-spacing: 0.18rem;
+}
 
   .body {
-    max-width: 360px;
+  max-width: 385px;
 
-    font-size: clamp(0.82rem, 1.65vw, 1.05rem);
-    line-height: 1.55;
-    letter-spacing: 0.025em;
-    word-spacing: 0.04rem;
-  }
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  line-height: 1.6;
+
+  letter-spacing: 0.03em;
+  word-spacing: 0.05rem;
+}
 
   /* ---------- CHARACTER ---------- */
 
   .charLayer {
-    position: relative;
-    right: auto;
-    bottom: auto;
+  position: relative;
 
-    width: auto;
-    height: min(88vh, 820px);
-    max-width: 58vw;
-    margin-bottom: -6vh;
+  right: auto;
+  bottom: auto;
 
-    flex: 0 0 auto;
-    align-self: flex-end;
+  width: auto;
+  height: min(98svh, 52rem);
+  max-width: 60vw;
 
-    object-fit: contain;
-    opacity: 1;
-  }
+  margin-bottom: -6svh;
+
+  flex: 0 0 auto;
+  align-self: flex-end;
+
+  object-fit: contain;
+  opacity: 1;
+}
 
   /* ---------- POSTCARD SECTION ---------- */
 
@@ -948,7 +960,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 425px) {
   .aboutSection,
   .topPanel,
   .aboutContent {
@@ -1286,6 +1298,216 @@
 }
 
 /* ======================================================
+   LARGE MOBILE
+   426px — 767px
+
+   Same composition family as 768px,
+   scaled down smoothly.
+====================================================== */
+
+@media (min-width: 426px) and (max-width: 767px) {
+  .aboutSection,
+  .topPanel,
+  .aboutContent {
+    overflow-x: clip;
+  }
+
+  .topPanel {
+    position: relative;
+    min-height: 100svh;
+    padding-top: 0;
+    overflow: hidden;
+  }
+
+  .aboutContent {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    min-height: 100svh;
+
+    padding: 0;
+  }
+
+  .sceneClip {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+  }
+
+  .bgLayer {
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: 54% center;
+  }
+
+  .bgOverlay {
+    background:
+      radial-gradient(
+        120% 100% at 55% 40%,
+        rgba(0, 0, 0, 0) 45%,
+        rgba(0, 0, 0, 0.45) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(7, 8, 12, 0.94) 0%,
+        rgba(7, 8, 12, 0.72) 34%,
+        rgba(7, 8, 12, 0.28) 62%,
+        rgba(7, 8, 12, 0) 84%
+      );
+  }
+
+  .copy {
+    position: absolute;
+
+    top: 19%;
+    left: 5vw;
+    z-index: 40;
+
+    width: min(42vw, 285px);
+    max-width: 285px;
+
+    margin-left: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .kicker {
+    margin: 0 0 16px;
+
+    font-size: clamp(3.4rem, 8.6vw, 4.5rem);
+    line-height: 0.89;
+  }
+
+  .subkicker {
+    width: 100%;
+    max-width: 285px;
+
+    margin: 0 0 20px;
+
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    line-height: 1.22;
+
+    letter-spacing: 0.025em;
+    word-spacing: 0.16rem;
+  }
+
+  .body {
+    width: 100%;
+    max-width: 275px;
+
+    margin: 0;
+
+    font-size: clamp(0.8rem, 1.8vw, 1.04rem);
+    line-height: 1.62;
+
+    letter-spacing: 0.035em;
+    word-spacing: 0.06rem;
+  }
+
+  .body + .body {
+    margin-top: 18px;
+  }
+
+  .charLayer {
+    position: absolute;
+
+    right: -14vw;
+    bottom: -10svh;
+    z-index: 30;
+
+    width: auto;
+
+    height: clamp(40rem, 92svh, 56rem);
+    max-width: none;
+
+    object-fit: contain;
+    opacity: 1;
+  }
+}
+
+/* ======================================================
+   SMALL / MEDIUM LAPTOP
+   1025px — 1200px
+====================================================== */
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .topPanel {
+    min-height: 104vh;
+    padding-top: 2vh;
+
+    overflow: visible;
+  }
+
+  .aboutContent {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+  }
+
+  .copy {
+    position: relative;
+    z-index: 20;
+
+    width: min(36vw, 410px);
+
+    margin-left: 13%;
+
+    gap: 16px;
+  }
+
+  .kicker {
+    margin-bottom: 12px;
+
+    font-size: clamp(4.65rem, 6vw, 5.1rem);
+    line-height: 0.89;
+  }
+
+  .subkicker {
+    max-width: 400px;
+
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.24;
+
+    word-spacing: 0.2rem;
+  }
+
+  .body {
+    max-width: 390px;
+
+    font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+    line-height: 1.6;
+  }
+
+  .charLayer {
+    position: absolute;
+
+    right: 2%;
+    bottom: -14vh;
+
+    width: auto;
+
+    height: clamp(52rem, 80vw, 60rem);
+    max-width: none;
+
+    object-fit: contain;
+  }
+}
+
+/* ======================================================
    LARGE LAPTOP
    1201px — 1440px
 ====================================================== */
@@ -1417,7 +1639,7 @@
     right: 1.5%;
     bottom: -16vh;
 
-    height: 117rem;
+    height: min(120vh, 114rem);
   }
 
   .bgLayer {
