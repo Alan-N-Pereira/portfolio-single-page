@@ -491,7 +491,7 @@
    768px — 1024px
 ====================================================== */
 
-@media (min-width: 768px) and (max-width: 900px) {
+@media (768px <= width < 901px)  {
   /* ---------- TOP PANEL ---------- */
 
  .aboutSection,
@@ -691,7 +691,7 @@
    Text and character remain in one flex row.
 ====================================================== */
 
-@media (min-width: 901px) and (max-width: 1024px) {
+@media (901px <= width < 1025px) {
   /* ---------- TOP PANEL ---------- */
 
   .topPanel {
@@ -886,7 +886,7 @@
    mobile reference.
 ====================================================== */
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .postcardWrap {
     padding: 72px 0 88px;
 
@@ -929,14 +929,14 @@
     font-size: 14px;
     line-height: 1.7;
   }
-}
+} */
 
 /* ======================================================
    SMALL MOBILE
    0px — 640px
 ====================================================== */
 
-@media (max-width: 640px) {
+/* @media (max-width: 640px) {
   .charLayer {
     right: 0;
 
@@ -958,41 +958,64 @@
     font-size: 0.54rem;
     line-height: 1.8;
   }
-}
+} */
 
-@media (max-width: 425px) {
+/* ======================================================
+   SMALL MOBILE ABOUT
+   0px — 425px
+
+   Restores the original mobile composition.
+====================================================== */
+
+@media (max-width: 430px) {
   .aboutSection,
   .topPanel,
   .aboutContent {
     overflow-x: clip;
   }
 
+  /* ====================================================
+     TOP PANEL
+  ==================================================== */
+
   .topPanel {
     position: relative;
+
     min-height: 140svh;
     padding-top: 0;
+
     display: block;
+
     overflow: hidden;
+
+    background: #000;
   }
 
-  /* Background only covers the upper scene area */
+  /* ====================================================
+     BACKGROUND
+  ==================================================== */
+
   .sceneClip {
     --skewY: 90px;
 
     position: absolute;
+
     top: 0;
-    left: 0;
     right: 0;
     bottom: auto;
+    left: 0;
+
     height: 78svh;
 
     overflow: hidden;
-    clip-path: inset(0 0 0 0);
+
+    clip-path: inset(0);
   }
 
   .scene {
     position: absolute;
     inset: 0;
+
     width: 100%;
     height: 100%;
   }
@@ -1000,6 +1023,7 @@
   .bgLayer {
     top: 0;
     left: 0;
+
     width: 100%;
     height: 100%;
 
@@ -1019,29 +1043,37 @@
       );
   }
 
-  /* Fade the scene out around the character legs */
   .bgBottomFade {
     right: 0;
-    left: 0;
     bottom: -1px;
+    left: 0;
+
     height: 18svh;
 
-    background: linear-gradient(
-      to bottom,
-      rgba(7, 8, 12, 0) 0%,
-      rgba(7, 8, 12, 0.16) 26%,
-      rgba(7, 8, 12, 0.45) 52%,
-      rgba(7, 8, 12, 0.82) 78%,
-      rgba(7, 8, 12, 1) 100%
-    );
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(7, 8, 12, 0) 0%,
+        rgba(7, 8, 12, 0.16) 26%,
+        rgba(7, 8, 12, 0.45) 52%,
+        rgba(7, 8, 12, 0.82) 78%,
+        rgba(7, 8, 12, 1) 100%
+      );
   }
+
+  /* ====================================================
+     CONTENT
+  ==================================================== */
 
   .aboutContent {
     position: relative;
     z-index: 10;
 
+    isolation: isolate;
+
     width: 100%;
     min-height: 140svh;
+
     padding: 0 0 10svh;
 
     display: flex;
@@ -1050,12 +1082,17 @@
     justify-content: flex-start;
   }
 
-  /* Character first */
+  /* ====================================================
+     CHARACTER
+  ==================================================== */
+
   .charLayer {
     position: relative;
+
     right: auto;
     bottom: -10vh;
     left: -2vw;
+
     z-index: 30;
 
     order: 1;
@@ -1064,113 +1101,55 @@
     width: auto;
     height: 84svh;
     max-width: none;
+
     margin-top: 4.5svh;
 
     object-fit: contain;
+
     opacity: 1;
   }
 
-  /* Text starts after the scene fade */
-  .copy {
-    position: relative;
-    z-index: 40;
+  /* ====================================================
+     CHARACTER → BLACK FADE
+  ==================================================== */
 
-    order: 2;
-    align-self: flex-start;
-
-    width: min(72vw, 320px);
-    margin: 2.5svh 0 0 11vw;
-    padding: 0;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 0;
-  }
-
-  .kicker {
-    margin: 0 0 18px;
-
-    font-size: clamp(4.5rem, 14vw, 4.4rem);
-    line-height: 0.92;
-  }
-
-  .subkicker {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 0 20px;
-
-    font-size: clamp(1.76rem, 6.4vw, 1.9rem);
-    line-height: 1.2;
-    letter-spacing: 0.05em;
-    word-spacing: 0.14rem;
-  }
-
-  .body {
-    width: 100%;
-    max-width: 300px;
-    margin: 0;
-
-    font-size: clamp(1.05rem, 3.9vw, 1rem);
-    line-height: 1.65;
-    letter-spacing: 0.09em;
-    word-spacing: 0.08rem;
-  }
-
-  .body + .body {
-    margin-top: 18px;
-  }
-
-  .aboutContent {
-    position: relative;
-    isolation: isolate;
-  }
-
-  /*
-    Black transition layer.
-
-    z-index 35 places it:
-    - above the character, which is z-index 30
-    - below the text, which is z-index 40
-
-    This softly fades the lower legs into the black text area.
-  */
   .aboutContent::after {
     content: "";
 
     position: absolute;
+
     top: 62svh;
-    left: 0;
     right: 0;
+    left: 0;
+
     z-index: 35;
 
     height: 46svh;
 
     pointer-events: none;
 
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.08) 12%,
-      rgba(0, 0, 0, 0.28) 27%,
-      rgba(0, 0, 0, 0.62) 43%,
-      rgba(0, 0, 0, 0.9) 58%,
-      #000 72%,
-      #000 100%
-    );
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.08) 12%,
+        rgba(0, 0, 0, 0.28) 27%,
+        rgba(0, 0, 0, 0.62) 43%,
+        rgba(0, 0, 0, 0.9) 58%,
+        #000 72%,
+        #000 100%
+      );
   }
 
-  .charLayer {
-    z-index: 30;
-  }
+  /* ====================================================
+     MAIN TEXT
+  ==================================================== */
 
-  /*
-    Centre the complete text block while keeping
-    its contents aligned to the left.
-  */
   .copy {
     position: relative;
     z-index: 40;
+
+    order: 2;
 
     align-self: center;
     align-items: flex-start;
@@ -1180,6 +1159,11 @@
 
     margin: 10svh auto 0;
     padding: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0;
 
     text-align: left;
   }
@@ -1192,39 +1176,72 @@
   }
 
   .kicker {
-    margin-bottom: 20px;
+    margin: 0 0 20px;
+
+    font-size: clamp(4.5rem, 14vw, 4.4rem);
+    line-height: 0.92;
   }
 
   .subkicker {
-    margin-bottom: 22px;
+    margin: 0 0 22px;
+
+    font-size: clamp(1.76rem, 6.4vw, 1.9rem);
+    line-height: 1.2;
+
+    letter-spacing: 0.05em;
+    word-spacing: 0.14rem;
+  }
+
+  .body {
+    margin: 0;
+
+    font-size: clamp(1rem, 3.9vw, 1.05rem);
+    line-height: 1.65;
+
+    letter-spacing: 0.09em;
+    word-spacing: 0.08rem;
   }
 
   .body + .body {
     margin-top: 20px;
   }
 
-   /* ====================================================
-     MOBILE POSTCARD / DIALOGUE SECTION
+  /* ====================================================
+     POSTCARD
   ==================================================== */
 
   .postcardWrap {
     padding: 64px 0 88px;
+
+    overflow: hidden;
   }
 
   .postcard {
     width: 100%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     gap: 36px;
   }
 
-  /* Shorter dialogue box */
   .postcardMedia {
+    order: 1;
+
     width: 100%;
   }
+
+  /* ====================================================
+     DIALOGUE BOX
+  ==================================================== */
 
   .photoCard {
     width: min(84vw, 330px);
     height: 250px;
     min-height: 0;
+
     margin: 0 auto;
   }
 
@@ -1232,6 +1249,7 @@
     width: 100%;
     height: 100%;
     min-height: 0;
+
     padding: 18px 16px;
   }
 
@@ -1242,35 +1260,40 @@
   .faceWrap {
     width: 86px;
     height: 86px;
+
     margin-top: 0;
   }
 
-  /* Larger and more readable dialogue text */
   .pixelDialogText {
     font-size: 0.92rem;
     line-height: 1.75;
+
     letter-spacing: 0.012em;
     word-spacing: 0.05rem;
   }
 
   /* ====================================================
-     MOBILE POSTCARD TEXT
-     Matches the readability of the previous section
+     POSTCARD TEXT
   ==================================================== */
 
   .postcardText {
+    order: 2;
+
     width: min(84vw, 320px);
     max-width: 320px;
+
     margin: 0 auto;
     padding: 0;
 
     gap: 0;
+
     text-align: left;
   }
 
   .postcardText .subkicker {
     width: 100%;
     max-width: none;
+
     margin: 0 0 24px;
 
     font-size: clamp(1.6rem, 7vw, 1.9rem);
@@ -1283,6 +1306,7 @@
   .postcardText .body {
     width: 100%;
     max-width: none;
+
     margin: 0;
 
     font-size: 1.05rem;
@@ -1305,7 +1329,7 @@
    scaled down smoothly.
 ====================================================== */
 
-@media (min-width: 426px) and (max-width: 767px) {
+/* @media (min-width: 426px) and (max-width: 767px) {
   .aboutSection,
   .topPanel,
   .aboutContent {
@@ -1433,6 +1457,417 @@
     object-fit: contain;
     opacity: 1;
   }
+} */
+
+/* ======================================================
+   MOBILE ABOUT
+   0px — 767px
+
+   One consistent vertical composition.
+   768px+ remains completely unchanged.
+====================================================== */
+
+@media (431px <= width < 768px) {
+  /* ====================================================
+     SECTION / TOP PANEL
+  ==================================================== */
+
+  .aboutSection {
+    overflow-x: clip;
+  }
+
+  .topPanel {
+    --mobile-scene-height: clamp(640px, 145vw, 820px);
+
+    position: relative;
+
+    min-height: 0;
+    padding-top: 0;
+
+    display: block;
+
+    overflow: hidden;
+
+    background: #000;
+  }
+
+  /* ====================================================
+     BACKGROUND SCENE
+  ==================================================== */
+
+  .sceneClip {
+    --skewY: 0px;
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+
+    z-index: 1;
+
+    width: 100%;
+    height: var(--mobile-scene-height);
+
+    overflow: hidden;
+
+    clip-path: inset(0);
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .bgLayer {
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: 52% top;
+  }
+
+  .bgOverlay {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(7, 8, 12, 0.03) 0%,
+        rgba(7, 8, 12, 0.07) 34%,
+        rgba(7, 8, 12, 0.2) 56%,
+        rgba(7, 8, 12, 0.52) 77%,
+        rgba(7, 8, 12, 0.88) 94%,
+        #000 100%
+      );
+  }
+
+  .bgBottomFade {
+    right: 0;
+    bottom: -1px;
+    left: 0;
+
+    z-index: 2;
+
+    height: 22%;
+
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.12) 22%,
+        rgba(0, 0, 0, 0.42) 50%,
+        rgba(0, 0, 0, 0.82) 78%,
+        #000 100%
+      );
+  }
+
+  /* ====================================================
+     ABOUT CONTENT
+  ==================================================== */
+
+  .aboutContent {
+    position: relative;
+    z-index: 10;
+
+    isolation: isolate;
+
+    box-sizing: border-box;
+
+    width: 100%;
+    min-height: 0;
+
+    padding:
+      0
+      0
+      clamp(72px, 12vw, 100px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    overflow: visible;
+  }
+
+  /* ====================================================
+     ALAN
+
+     Width-based scaling instead of vh-based breakpoint
+     jumps. This keeps proportions stable from 320–767.
+  ==================================================== */
+
+  .charLayer {
+    position: relative;
+
+    right: auto;
+    bottom: auto;
+    left: 0;
+
+    z-index: 30;
+
+    order: 1;
+    align-self: center;
+
+    width: auto;
+    height: clamp(40rem, 135vw, 51rem);
+    max-width: none;
+
+    margin:
+      clamp(16px, 4vw, 30px)
+      auto
+      0;
+
+    object-fit: contain;
+
+    opacity: 1;
+  }
+
+  /* ====================================================
+     FADE ALAN'S LEGS INTO BLACK
+
+     Fade remains ABOVE Alan but BELOW text.
+  ==================================================== */
+
+  .aboutContent::after {
+    content: "";
+
+    position: absolute;
+
+    top: calc(var(--mobile-scene-height) - 190px);
+    right: 0;
+    left: 0;
+
+    z-index: 35;
+
+    height: 250px;
+
+    pointer-events: none;
+
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.05) 10%,
+        rgba(0, 0, 0, 0.22) 25%,
+        rgba(0, 0, 0, 0.56) 43%,
+        rgba(0, 0, 0, 0.86) 60%,
+        #000 76%,
+        #000 100%
+      );
+  }
+
+  /* ====================================================
+     ABOUT TEXT
+  ==================================================== */
+
+  .copy {
+    position: relative;
+    z-index: 40;
+
+    order: 2;
+
+    align-self: center;
+    align-items: flex-start;
+
+    width: min(82vw, 420px);
+    max-width: 420px;
+
+    margin:
+      clamp(-16px, -1vw, -6px)
+      auto
+      0;
+
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    gap: 0;
+
+    text-align: left;
+  }
+
+  .kicker,
+  .subkicker,
+  .body {
+    width: 100%;
+    max-width: none;
+  }
+
+  .kicker {
+    margin: 0 0 20px;
+
+    font-size: clamp(4.25rem, 10vw, 4.8rem);
+    line-height: 0.9;
+  }
+
+  .subkicker {
+    margin: 0 0 22px;
+
+    font-size: clamp(1.76rem, 4.4vw, 2rem);
+    line-height: 1.24;
+
+    letter-spacing: 0.035em;
+    word-spacing: 0.14rem;
+  }
+
+  .body {
+    margin: 0;
+
+    font-size: clamp(1rem, 2.2vw, 1.08rem);
+    line-height: 1.68;
+
+    letter-spacing: 0.055em;
+    word-spacing: 0.08rem;
+  }
+
+  .body + .body {
+    margin-top: 22px;
+  }
+
+  /* ====================================================
+     POSTCARD SECTION
+  ==================================================== */
+
+  .postcardWrap {
+    padding:
+      clamp(64px, 10vw, 84px)
+      0
+      clamp(88px, 13vw, 112px);
+
+    overflow: hidden;
+  }
+
+  .postcard {
+    width: 100%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: clamp(36px, 6vw, 48px);
+  }
+
+  /* ====================================================
+     DIALOGUE BOX
+  ==================================================== */
+
+  .postcardMedia {
+    order: 1;
+
+    width: 100%;
+
+    display: grid;
+    place-items: center;
+  }
+
+  .photoCard {
+    width: min(84vw, 520px);
+
+    height: clamp(
+      250px,
+      50vw,
+      330px
+    );
+
+    min-height: 0;
+
+    margin: 0 auto;
+  }
+
+  .pixelDialog {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    padding:
+      clamp(16px, 3vw, 22px)
+      clamp(14px, 3vw, 20px);
+  }
+
+  .dialogInner {
+    gap: clamp(12px, 2.5vw, 18px);
+  }
+
+  .faceWrap {
+    width: clamp(72px, 14vw, 100px);
+    height: clamp(72px, 14vw, 100px);
+
+    margin-top: 0;
+
+    flex-shrink: 0;
+  }
+
+  .pixelDialogText {
+    font-size: clamp(0.8rem, 2.25vw, 0.96rem);
+    line-height: 1.7;
+
+    letter-spacing: 0.01em;
+    word-spacing: 0.04rem;
+  }
+
+  /* ====================================================
+     POSTCARD TEXT
+  ==================================================== */
+
+  .postcardText {
+    order: 2;
+
+    width: min(84vw, 520px);
+    max-width: 520px;
+
+    margin: 0 auto;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0;
+
+    text-align: left;
+  }
+
+  .postcardText .subkicker {
+    width: 100%;
+    max-width: none;
+
+    margin: 0 0 24px;
+
+    font-size: clamp(1.55rem, 4.2vw, 2rem);
+    line-height: 1.26;
+
+    letter-spacing: 0.025em;
+    word-spacing: 0.16rem;
+  }
+
+  .postcardText .body {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+
+    font-size: clamp(0.98rem, 2.1vw, 1.1rem);
+    line-height: 1.7;
+
+    letter-spacing: 0.05em;
+    word-spacing: 0.08rem;
+  }
+
+  .postcardText .body + .body {
+    margin-top: 22px;
+  }
 }
 
 /* ======================================================
@@ -1440,7 +1875,7 @@
    1025px — 1200px
 ====================================================== */
 
-@media (min-width: 1025px) and (max-width: 1200px) {
+@media (1025px <= width < 1201px) {
   .topPanel {
     min-height: 104vh;
     padding-top: 2vh;
@@ -1512,7 +1947,7 @@
    1201px — 1440px
 ====================================================== */
 
-@media (min-width: 1201px) and (max-width: 1440px) {
+@media (1201px <= width < 1441px) {
   .charLayer {
     right: 3%;
     bottom: -15vh;
@@ -1592,7 +2027,7 @@
    LARGE SCENE SKEW
 ====================================================== */
 
-@media (min-width: 1600px) {
+@media (1600px <= width < 1900px) {
   .sceneClip {
     --skewY: 120px;
   }
@@ -1603,7 +2038,7 @@
    1900px AND ABOVE
 ====================================================== */
 
-@media (min-width: 1900px) {
+@media (width >= 1900px) {
   .topPanel {
     min-height: 108vh;
     padding-top: 0;
